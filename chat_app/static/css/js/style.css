@@ -6,7 +6,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f4f4f4;
+    background-color: #766464;
 }
 
 #app {
@@ -14,5 +14,5 @@ body {
 }
 
 h1 {
-    color: #333;
+    color: #e70000;
 }
