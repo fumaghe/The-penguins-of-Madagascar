@@ -5,9 +5,25 @@ document.addEventListener('DOMContentLoaded', () => {
     loginBtn.addEventListener('click', () => {
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
-        // Esegui la logica di login qui...
-        console.log('Username:', username);
-        console.log('Password:', password);
+
+        fetch('/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({username, password})
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert(data.message);
+            // Esegui le azioni successive al login
+        })
+        .catch(error => {
+            alert('Login failed. Invalid username or password.');
+            console.error('Error:', error);
+        });
     });
 });
-
