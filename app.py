@@ -2,6 +2,7 @@ import redis
 import hashlib
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_socketio import SocketIO, join_room, send, emit
+import datetime
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'  # Cambia questa chiave con una chiave segreta sicura
@@ -35,11 +36,22 @@ def login():
             else:
                 return "Password errata. Riprova."
         else:
-            user_data = {"username": username, "password": hash_password(password)}
+            return "Nome utente non trovato. Riprova."
+    return render_template('login.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        if r.exists(username):
+            return "Nome utente già esistente. Scegli un nome diverso."
+        else:
+            user_data = {"username": username, "password": hash_password(password), "dnd": "false"}
             r.hset(username, mapping=user_data)
             session['username'] = username
             return redirect(url_for('home'))
-    return render_template('login.html')
+    return render_template('register.html')
 
 @app.route('/home')
 def home():
@@ -61,8 +73,11 @@ def add_contact():
     if request.method == 'POST':
         username = session['username']
         new_contact = request.form['new_contact']
-        add_contact_to_book(username, new_contact)
-        return redirect(url_for('home'))
+        if r.exists(new_contact):
+            add_contact_to_book(username, new_contact)
+            return redirect(url_for('home'))
+        else:
+            return "Utente non trovato."
     return render_template('add_contact.html')
 
 @app.route('/remove_contact', methods=['GET', 'POST'])
@@ -83,6 +98,26 @@ def contacts():
     username = session['username']
     contacts = get_contacts(username)
     return render_template('contacts.html', contacts=contacts)
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        search_query = request.form['search_query']
+        results = search_users(search_query)
+        return render_template('search_results.html', results=results)
+    return render_template('search.html')
+
+@app.route('/dnd', methods=['POST'])
+def toggle_dnd():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    username = session['username']
+    user_data = r.hgetall(username)
+    new_dnd_status = "true" if user_data["dnd"] == "false" else "false"
+    r.hset(username, "dnd", new_dnd_status)
+    return redirect(url_for('home'))
 
 @app.route('/chat/<contact>')
 def chat(contact):
@@ -105,9 +140,17 @@ def on_message(data):
     room = data['room']
     message = data['message']
     username = data['username']
+    contact = data['contact']
     chat_key = f"{room}_chat"
-    r.rpush(chat_key, f"{username}: {message}")
-    send(username + ": " + message, to=room)
+
+    contact_data = r.hgetall(contact)
+    if contact_data.get("dnd") == "true":
+        emit('error', {'msg': 'L\'utente è in modalità Do Not Disturb.'}, to=request.sid)
+    else:
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        formatted_message = f"{timestamp} > {username}: {message}"
+        r.rpush(chat_key, formatted_message)
+        send(formatted_message, to=room)
 
 def get_contacts(username):
     contacts_key = f"{username}_contacts"
@@ -124,6 +167,11 @@ def remove_contact_from_book(username, contact_to_remove):
     contacts_key = f"{username}_contacts"
     r.lrem(contacts_key, 0, contact_to_remove)
 
+def search_users(query):
+    all_users = r.keys('*')
+    matching_users = [user for user in all_users if query in user]
+    return matching_users
+
 def get_room_name(username, contact):
     participants = sorted([username, contact])
     return f"{participants[0]}_{participants[1]}"
@@ -133,4 +181,4 @@ def get_chat_messages(room):
     return r.lrange(chat_key, 0, -1)
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
+    socketio.run(app, debug=True)   

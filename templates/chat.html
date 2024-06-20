@@ -18,9 +18,13 @@
                 messages.appendChild(message);
             });
 
+            socket.on('error', function(data) {
+                alert(data.msg);
+            });
+
             document.getElementById('send').onclick = function() {
                 var message = document.getElementById('message').value;
-                socket.emit('message', {room: room, message: message, username: username});
+                socket.emit('message', {room: room, message: message, username: username, contact: "{{ contact }}"});
                 document.getElementById('message').value = '';
             };
         });

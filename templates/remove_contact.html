@@ -5,10 +5,11 @@
 </head>
 <body>
     <h1>Rimuovi Contatto</h1>
-    <form method="POST" action="/remove_contact">
-        <label for="contact_to_remove">Contatto da Rimuovere:</label>
+    <form method="post" action="/remove_contact">
+        <label for="contact_to_remove">Nome Utente:</label>
         <input type="text" id="contact_to_remove" name="contact_to_remove" required><br>
         <button type="submit">Rimuovi</button>
     </form>
+    <p><a href="{{ url_for('home') }}">Torna alla Home</a></p>
 </body>
 </html>

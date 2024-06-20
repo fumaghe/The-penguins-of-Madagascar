@@ -5,10 +5,11 @@
 </head>
 <body>
     <h1>Aggiungi Contatto</h1>
-    <form method="POST" action="/add_contact">
-        <label for="new_contact">Nuovo Contatto:</label>
+    <form method="post" action="/add_contact">
+        <label for="new_contact">Nome Utente:</label>
         <input type="text" id="new_contact" name="new_contact" required><br>
         <button type="submit">Aggiungi</button>
     </form>
+    <p><a href="{{ url_for('home') }}">Torna alla Home</a></p>
 </body>
 </html>

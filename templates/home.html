@@ -4,18 +4,19 @@
     <title>Home</title>
 </head>
 <body>
-    <h1>Welcome, {{ username }}!</h1>
-    <div>
-        <a href="{{ url_for('add_contact') }}">Aggiungi nuovo contatto</a> |
-        <a href="{{ url_for('remove_contact') }}">Elimina contatto</a> |
-        <a href="{{ url_for('contacts') }}">Rubrica</a> |
-        <a href="{{ url_for('logout') }}">Logout</a>
-    </div>
+    <h1>Benvenuto, {{ username }}!</h1>
+    <a href="{{ url_for('logout') }}">Logout</a>
     <h2>Contatti</h2>
     <ul>
         {% for contact in contacts %}
         <li><a href="{{ url_for('chat', contact=contact) }}">{{ contact }}</a></li>
         {% endfor %}
     </ul>
+    <a href="{{ url_for('add_contact') }}">Aggiungi contatto</a>
+    <a href="{{ url_for('remove_contact') }}">Rimuovi contatto</a>
+    <a href="{{ url_for('contacts') }}">Rubrica</a>
+    <form method="post" action="/dnd">
+        <button type="submit">Toggle Do Not Disturb</button>
+    </form>
 </body>
 </html>
