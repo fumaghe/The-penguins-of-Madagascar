@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rubrica</title>
+</head>
+<body>
+    <h1>Rubrica</h1>
+    <ul>
+        {% for contact in contacts %}
+        <li>{{ contact }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('home') }}">Torna alla Home</a>
+</body>
+</html>

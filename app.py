@@ -1,9 +1,7 @@
 import redis
-import threading
-import time
 import hashlib
-from flask import Flask, render_template, request, redirect, url_for, session
-from flask_socketio import SocketIO, join_room, leave_room, send
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask_socketio import SocketIO, join_room, send, emit
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'  # Cambia questa chiave con una chiave segreta sicura
@@ -48,12 +46,52 @@ def home():
     if 'username' not in session:
         return redirect(url_for('login'))
     username = session['username']
-    return render_template('home.html', username=username)
+    contacts = get_contacts(username)
+    return render_template('home.html', username=username, contacts=contacts)
 
 @app.route('/logout')
 def logout():
     session.pop('username', None)
     return redirect(url_for('login'))
+
+@app.route('/add_contact', methods=['GET', 'POST'])
+def add_contact():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        username = session['username']
+        new_contact = request.form['new_contact']
+        add_contact_to_book(username, new_contact)
+        return redirect(url_for('home'))
+    return render_template('add_contact.html')
+
+@app.route('/remove_contact', methods=['GET', 'POST'])
+def remove_contact():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        username = session['username']
+        contact_to_remove = request.form['contact_to_remove']
+        remove_contact_from_book(username, contact_to_remove)
+        return redirect(url_for('home'))
+    return render_template('remove_contact.html')
+
+@app.route('/contacts')
+def contacts():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    username = session['username']
+    contacts = get_contacts(username)
+    return render_template('contacts.html', contacts=contacts)
+
+@app.route('/chat/<contact>')
+def chat(contact):
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    username = session['username']
+    room = get_room_name(username, contact)
+    messages = get_chat_messages(room)
+    return render_template('chat.html', username=username, contact=contact, messages=messages, room=room)
 
 @socketio.on('join')
 def on_join(data):
@@ -61,13 +99,6 @@ def on_join(data):
     room = data['room']
     join_room(room)
     send(username + ' has entered the room.', to=room)
-
-@socketio.on('leave')
-def on_leave(data):
-    username = data['username']
-    room = data['room']
-    leave_room(room)
-    send(username + ' has left the room.', to=room)
 
 @socketio.on('message')
 def on_message(data):
@@ -78,13 +109,28 @@ def on_message(data):
     r.rpush(chat_key, f"{username}: {message}")
     send(username + ": " + message, to=room)
 
-@socketio.on('load_messages')
-def load_messages(data):
-    room = data['room']
+def get_contacts(username):
+    contacts_key = f"{username}_contacts"
+    if not r.exists(contacts_key):
+        r.rpush(contacts_key, username)
+    contacts = r.lrange(contacts_key, 0, -1)
+    return contacts
+
+def add_contact_to_book(username, new_contact):
+    contacts_key = f"{username}_contacts"
+    r.rpush(contacts_key, new_contact)
+
+def remove_contact_from_book(username, contact_to_remove):
+    contacts_key = f"{username}_contacts"
+    r.lrem(contacts_key, 0, contact_to_remove)
+
+def get_room_name(username, contact):
+    participants = sorted([username, contact])
+    return f"{participants[0]}_{participants[1]}"
+
+def get_chat_messages(room):
     chat_key = f"{room}_chat"
-    messages = r.lrange(chat_key, 0, -1)
-    for message in messages:
-        send(message, to=room)
+    return r.lrange(chat_key, 0, -1)
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)
