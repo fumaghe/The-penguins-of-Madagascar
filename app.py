@@ -1,6 +1,6 @@
 import redis
 import hashlib
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session
 from flask_socketio import SocketIO, join_room, send, emit
 import datetime
 
@@ -133,7 +133,7 @@ def on_join(data):
     username = data['username']
     room = data['room']
     join_room(room)
-    send(username + ' has entered the room.', to=room)
+    send({'message': f'{username} has entered the room.', 'username': 'system'}, to=room)
 
 @socketio.on('message')
 def on_message(data):
@@ -150,7 +150,7 @@ def on_message(data):
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         formatted_message = f"{timestamp} > {username}: {message}"
         r.rpush(chat_key, formatted_message)
-        send(formatted_message, to=room)
+        send({'message': message, 'username': username, 'timestamp': timestamp}, to=room)
 
 def get_contacts(username):
     contacts_key = f"{username}_contacts"

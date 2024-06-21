@@ -14,7 +14,17 @@
             socket.on('message', function(data) {
                 var messages = document.getElementById('messages');
                 var message = document.createElement('li');
-                message.innerText = data;
+                var messageContent = '';
+
+                if (data.username === 'system') {
+                    messageContent = `< ${data.message}`;
+                } else if (data.username === username) {
+                    messageContent = `> ${data.timestamp} ${data.username}: ${data.message}`;
+                } else {
+                    messageContent = `< ${data.timestamp} ${data.username}: ${data.message}`;
+                }
+
+                message.innerHTML = messageContent;
                 messages.appendChild(message);
             });
 
@@ -34,11 +44,16 @@
     <h1>Chat con {{ contact }}</h1>
     <ul id="messages">
         {% for message in messages %}
-        <li>{{ message }}</li>
+        {% set message_parts = message.split(' ', 2) %}
+        {% if message_parts[1].startswith(username) %}
+        <li>> {{ message_parts[0] }} {{ message_parts[1] }}</li>
+        {% else %}
+        <li>< {{ message_parts[0] }} {{ message_parts[1] }}</li>
+        {% endif %}
         {% endfor %}
     </ul>
-    <input type="text" id="message" placeholder="Enter message">
-    <button id="send">Send</button>
+    <input type="text" id="message" placeholder="Inserisci il messaggio">
+    <button id="send">Invia</button>
     <br>
     <a href="{{ url_for('home') }}">Torna alla Home</a>
 </body>
