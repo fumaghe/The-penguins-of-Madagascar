@@ -5,87 +5,67 @@
     <title>Chat App</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://use.fontawesome.com/1c6f725ec5.js"></script>
 </head>
 <body>
-<div class="container-fluid">
-    <div class="row vh-100">
-        <!-- Contact List Column -->
-        <div class="col-md-4 col-lg-3 bg-light border-right">
-            <h3 class="mt-3">Contacts</h3>
-            <button id="add-btn" class="btn btn-primary mb-2">Add</button>
-            <button id="remove-btn" class="btn btn-danger mb-3">Remove</button>
-            <ul class="list-group" id="contact-list">
-                {% for contact in contacts %}
-                <li class="list-group-item contact-item" data-contact="{{ contact }}">
-                    <img src="{{ url_for('static', filename='avatar.png') }}" class="rounded-circle" width="30" alt="Avatar">
-                    {{ contact }}
-                </li>
-                {% endfor %}
-            </ul>
-            <hr>
-            <h5>Do Not Disturb</h5>
-            <input type="checkbox" id="dnd-checkbox" {{ 'checked' if dnd == 'true' else '' }}> Enable
-            <hr>
-            <button id="profile-btn" class="btn btn-secondary">Profile</button>
-        </div>
-        <!-- Chat Column -->
-        <div class="col-md-8 col-lg-9 d-flex flex-column">
-            <div id="chat-container" class="d-none flex-grow-1">
-                <div class="d-flex align-items-center p-3 border-bottom">
-                    <img src="{{ url_for('static', filename='avatar.png') }}" class="rounded-circle" width="50" alt="Avatar">
-                    <div class="ml-3">
-                        <h5 id="chat-contact-name"></h5>
-                        <small id="chat-contact-status">Last seen: 2 hours ago</small>
-                    </div>
+    <div class="green-background"></div>
+    <div class="wrap">
+        <section class="left">
+            <div class="profile">
+                <img src="{{ url_for('static', filename='avatar.png') }}">
+                <div class="icons">
+                    <i class="fa fa-commenting fa-lg" aria-hidden="true"></i>
+                    <i class="fa fa-bars fa-lg" aria-hidden="true"></i>
                 </div>
-                <div id="chat-messages" class="p-3 overflow-auto flex-grow-1">
+            </div>
+            <div class="wrap-search">
+                <div class="search">
+                    <i class="fa fa-search fa" aria-hidden="true"></i>
+                    <input type="text" class="input-search" placeholder="Search or start new chat">
+                </div>
+            </div>
+            <div class="contact-list">
+                <ul class="list-group" id="contact-list">
+                    {% for contact in contacts %}
+                    <li class="contact list-group-item contact-item" data-contact="{{ contact }}">
+                        <img src="{{ url_for('static', filename='avatar.png') }}" class="rounded-circle" width="50" alt="Avatar">
+                        <div class="contact-preview">
+                            <div class="contact-text">
+                                <h1 class="font-name">{{ contact }}</h1>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+        <section class="right">
+            <div class="chat-head">
+                <img src="{{ url_for('static', filename='avatar.png') }}">
+                <div class="chat-name">
+                    <h1 class="font-name" id="chat-contact-name">Select a contact</h1>
+                    <p class="font-online" id="chat-contact-status"></p>
+                </div>
+                <i class="fa fa-search fa-lg" aria-hidden="true"></i>
+                <i class="fa fa-paperclip fa-lg" aria-hidden="true"></i>
+                <i class="fa fa-bars fa-lg" aria-hidden="true" id="show-contact-information"></i>
+                <i class="fa fa-times fa-lg" aria-hidden="true" id="close-contact-information"></i>
+            </div>
+            <div class="wrap-chat">
+                <div class="chat" id="chat-window">
                     <!-- Messages will be loaded here -->
                 </div>
-                <div class="input-group p-3 border-top">
-                    <input type="text" id="message-input" class="form-control" placeholder="Enter text here...">
-                    <div class="input-group-append">
-                        <button id="send-message" class="btn btn-primary">Send</button>
+                <div class="wrap-message">
+                    <i class="fa fa-smile-o fa-lg" aria-hidden="true"></i>
+                    <div class="message">
+                        <input type="text" class="input-message" id="message-input" placeholder="Enter text here...">
                     </div>
+                    <i class="fa fa-microphone fa-lg" aria-hidden="true"></i>
                 </div>
             </div>
-            <div id="no-chat-selected" class="d-flex justify-content-center align-items-center flex-grow-1">
-                <h3>Select a contact to start chatting</h3>
-            </div>
-        </div>
+        </section>
     </div>
-</div>
-
-<!-- Profile Modal -->
-<div class="modal fade" id="profile-modal" tabindex="-1" role="dialog" aria-labelledby="profile-modal-label" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="profile-modal-label">Profile</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="profile-form" method="post" action="/profile" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label for="new-username">New Username</label>
-                        <input type="text" class="form-control" id="new-username" name="new_username">
-                    </div>
-                    <div class="form-group">
-                        <label for="new-password">New Password</label>
-                        <input type="password" class="form-control" id="new-password" name="new_password">
-                    </div>
-                    <div class="form-group">
-                        <label for="avatar">Avatar</label>
-                        <input type="file" class="form-control" id="avatar" name="avatar">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -98,8 +78,7 @@
         $('.contact-item').on('click', function() {
             var contact = $(this).data('contact');
             $('#chat-contact-name').text(contact);
-            $('#chat-container').removeClass('d-none');
-            $('#no-chat-selected').addClass('d-none');
+            $('#chat-contact-status').text('Loading...');
 
             // Join the room
             var room = getRoomName(username, contact);
@@ -107,67 +86,51 @@
 
             // Load chat messages for the selected contact
             $.get('/chat/' + contact, function(data) {
-                $('#chat-messages').html(data.messages.map(function(message) {
-                    var msgClass = message.includes(username) ? 'sent-message' : 'received-message';
-                    return `<div class="${msgClass}">${message}</div>`;
+                $('#chat-window').html(data.messages.map(function(message) {
+                    var msgClass = message.username === username ? 'me' : 'you';
+                    return `
+                        <div class="chat-bubble ${msgClass}">
+                            <div class="${msgClass === 'me' ? 'my-mouth' : 'your-mouth'}"></div>
+                            <div class="content">
+                                ${message.message}
+                            </div>
+                            <div class="time">
+                                ${message.timestamp}
+                            </div>
+                        </div>`;
                 }).join(''));
-                $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+                $('#chat-contact-status').text('');
+                $('#chat-window').scrollTop($('#chat-window')[0].scrollHeight);
             });
         });
 
         // Handle message send
-        $('#send-message').on('click', function() {
-            var message = $('#message-input').val();
-            var contact = $('#chat-contact-name').text();
-            var room = getRoomName(username, contact);
+        $('#message-input').on('keypress', function(e) {
+            if (e.which === 13) { // Enter key
+                var message = $('#message-input').val();
+                var contact = $('#chat-contact-name').text();
+                var room = getRoomName(username, contact);
 
-            socket.emit('message', { room: room, message: message, username: username, contact: contact });
-            $('#message-input').val('');
+                if (contact !== 'Select a contact') {
+                    socket.emit('message', { room: room, message: message, username: username, contact: contact });
+                    $('#message-input').val('');
+                }
+            }
         });
 
         socket.on('message', function(data) {
-            if (data.error) {
-                alert(data.error);
-                return;
-            }
-            var msgClass = data.username === username ? 'sent-message' : 'received-message';
-            $('#chat-messages').append(`<div class="${msgClass}">${data.timestamp} ${data.username}: ${data.message}</div>`);
-            $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
-        });
-
-        // Handle Add Contact
-        $('#add-btn').on('click', function() {
-            var newContact = prompt("Enter the username of the contact to add:");
-            if (newContact) {
-                $.post('/add_contact', { new_contact: newContact }, function(data) {
-                    if (data.status === "success") {
-                        location.reload();
-                    } else {
-                        alert(data.message);
-                    }
-                });
-            }
-        });
-
-        // Handle Remove Contact
-        $('#remove-btn').on('click', function() {
-            var contactToRemove = prompt("Enter the username of the contact to remove:");
-            if (contactToRemove) {
-                $.post('/remove_contact', { contact_to_remove: contactToRemove }, function() {
-                    location.reload();
-                });
-            }
-        });
-
-        // Handle DND
-        $('#dnd-checkbox').on('change', function() {
-            var dnd = $(this).is(':checked');
-            $.post('/toggle_dnd', { dnd: dnd });
-        });
-
-        // Handle Profile
-        $('#profile-btn').on('click', function() {
-            $('#profile-modal').modal('show');
+            var msgClass = data.username === username ? 'me' : 'you';
+            $('#chat-window').append(`
+                <div class="chat-bubble ${msgClass}">
+                    <div class="${msgClass === 'me' ? 'my-mouth' : 'your-mouth'}"></div>
+                    <div class="content">
+                        ${data.message}
+                    </div>
+                    <div class="time">
+                        ${data.timestamp}
+                    </div>
+                </div>`);
+            $('#chat-window').scrollTop($('#chat-window')[0].scrollHeight);
         });
 
         function getRoomName(user1, user2) {
@@ -176,23 +139,5 @@
         }
     });
 </script>
-<style>
-    .sent-message {
-        background-color: #d4edda;
-        border: 1px solid #c3e6cb;
-        border-radius: 10px;
-        margin: 5px;
-        padding: 10px;
-        text-align: right;
-    }
-    .received-message {
-        background-color: #f8f9fa;
-        border: 1px solid #dae0e5;
-        border-radius: 10px;
-        margin: 5px;
-        padding: 10px;
-        text-align: left;
-    }
-</style>
 </body>
 </html>

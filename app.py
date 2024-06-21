@@ -133,7 +133,7 @@ def chat(contact):
     username = session['username']
     room = get_room_name(username, contact)
     messages = get_chat_messages(room)
-    return render_template('chat.html', username=username, contact=contact, messages=messages, room=room)
+    return jsonify({"messages": [{"username": msg.split("> ")[1].split(": ")[0], "message": msg.split(": ")[2], "timestamp": msg.split(" > ")[0]} for msg in messages]})
 
 @socketio.on('join')
 def on_join(data):
