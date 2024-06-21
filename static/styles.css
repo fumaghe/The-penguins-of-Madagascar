@@ -1,0 +1,19 @@
+body {
+    background-color: #f8f9fa;
+}
+
+#messages {
+    height: 400px;
+    overflow-y: scroll;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: #ffffff;
+}
+
+.list-group-item-primary {
+    background-color: #d1ecf1;
+}
+
+.list-group-item-secondary {
+    background-color: #f8d7da;
+}

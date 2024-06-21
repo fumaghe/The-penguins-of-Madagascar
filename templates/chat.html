@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>Chat con {{ contact }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
@@ -24,8 +26,10 @@
                     messageContent = `< ${data.timestamp} ${data.username}: ${data.message}`;
                 }
 
+                message.classList.add('list-group-item');
                 message.innerHTML = messageContent;
                 messages.appendChild(message);
+                messages.scrollTop = messages.scrollHeight; // Scroll to bottom
             });
 
             socket.on('error', function(data) {
@@ -41,20 +45,26 @@
     </script>
 </head>
 <body>
-    <h1>Chat con {{ contact }}</h1>
-    <ul id="messages">
-        {% for message in messages %}
-        {% set message_parts = message.split(' ', 2) %}
-        {% if message_parts[1].startswith(username) %}
-        <li>> {{ message_parts[0] }} {{ message_parts[1] }}</li>
-        {% else %}
-        <li>< {{ message_parts[0] }} {{ message_parts[1] }}</li>
-        {% endif %}
-        {% endfor %}
-    </ul>
-    <input type="text" id="message" placeholder="Inserisci il messaggio">
-    <button id="send">Invia</button>
-    <br>
-    <a href="{{ url_for('home') }}">Torna alla Home</a>
+    <div class="container mt-5">
+        <h1 class="mb-4">Chat con {{ contact }}</h1>
+        <ul id="messages" class="list-group mb-3">
+            {% for message in messages %}
+            {% set message_parts = message.split(' ', 2) %}
+            {% if message_parts[1].startswith(username) %}
+            <li class="list-group-item list-group-item-primary">> {{ message_parts[0] }} {{ message_parts[1] }}</li>
+            {% else %}
+            <li class="list-group-item list-group-item-secondary">< {{ message_parts[0] }} {{ message_parts[1] }}</li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+        <div class="input-group">
+            <input type="text" id="message" class="form-control" placeholder="Inserisci il messaggio">
+            <div class="input-group-append">
+                <button id="send" class="btn btn-primary">Invia</button>
+            </div>
+        </div>
+        <br>
+        <a href="{{ url_for('home') }}" class="btn btn-secondary">Torna alla Home</a>
+    </div>
 </body>
 </html>
