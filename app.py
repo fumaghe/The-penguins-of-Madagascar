@@ -181,4 +181,4 @@ def get_chat_messages(room):
     return r.lrange(chat_key, 0, -1)
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True)   
+    socketio.run(app, host='0.0.0.0', port=5000, debug=True)
