@@ -133,7 +133,17 @@ def chat(contact):
     username = session['username']
     room = get_room_name(username, contact)
     messages = get_chat_messages(room)
-    return jsonify({"messages": [{"username": msg.split("> ")[1].split(": ")[0], "message": msg.split(": ")[2], "timestamp": msg.split(" > ")[0]} for msg in messages]})
+    return render_template('chat.html', username=username, contact=contact, messages=messages, room=room)
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        search_query = request.form['search_query']
+        users = search_users(search_query)
+        return render_template('search_result.html', results=users)
+    return render_template('search.html')
 
 @socketio.on('join')
 def on_join(data):
@@ -181,6 +191,11 @@ def get_room_name(username, contact):
 def get_chat_messages(room):
     chat_key = f"{room}_chat"
     return r.lrange(chat_key, 0, -1)
+
+def search_users(query):
+    keys = r.keys(f"*{query}*")
+    users = [key for key in keys if r.type(key) == 'hash']
+    return users
 
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0', port=5000, debug=True)
