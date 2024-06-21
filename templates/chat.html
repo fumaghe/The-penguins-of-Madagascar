@@ -11,25 +11,16 @@
             var room = "{{ room }}";
             var username = "{{ username }}";
 
-            socket.emit('join', {username: username, room: room});
+            socket.emit('join', { username: username, room: room });
 
             socket.on('message', function(data) {
                 var messages = document.getElementById('messages');
                 var message = document.createElement('li');
-                var messageContent = '';
-
-                if (data.username === 'system') {
-                    messageContent = `< ${data.message}`;
-                } else if (data.username === username) {
-                    messageContent = `> ${data.timestamp} ${data.username}: ${data.message}`;
-                } else {
-                    messageContent = `< ${data.timestamp} ${data.username}: ${data.message}`;
-                }
-
-                message.classList.add('list-group-item');
-                message.innerHTML = messageContent;
+                var msgClass = data.username === username ? 'text-right bg-primary text-white' : 'text-left bg-light';
+                message.classList.add('list-group-item', msgClass);
+                message.innerHTML = `${data.timestamp} ${data.username}: ${data.message}`;
                 messages.appendChild(message);
-                messages.scrollTop = messages.scrollHeight; // Scroll to bottom
+                messages.scrollTop = messages.scrollHeight;
             });
 
             socket.on('error', function(data) {
@@ -38,7 +29,7 @@
 
             document.getElementById('send').onclick = function() {
                 var message = document.getElementById('message').value;
-                socket.emit('message', {room: room, message: message, username: username, contact: "{{ contact }}"});
+                socket.emit('message', { room: room, message: message, username: username, contact: "{{ contact }}" });
                 document.getElementById('message').value = '';
             };
         });
@@ -51,9 +42,9 @@
             {% for message in messages %}
             {% set message_parts = message.split(' ', 2) %}
             {% if message_parts[1].startswith(username) %}
-            <li class="list-group-item list-group-item-primary">> {{ message_parts[0] }} {{ message_parts[1] }}</li>
+            <li class="list-group-item text-right bg-primary text-white">> {{ message_parts[0] }} {{ message_parts[1] }}</li>
             {% else %}
-            <li class="list-group-item list-group-item-secondary">< {{ message_parts[0] }} {{ message_parts[1] }}</li>
+            <li class="list-group-item text-left bg-light">< {{ message_parts[0] }} {{ message_parts[1] }}</li>
             {% endif %}
             {% endfor %}
         </ul>
