@@ -1,18 +1,20 @@
 import redis
 import hashlib
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_socketio import SocketIO, join_room, send, emit
 import datetime
 
 app = Flask(__name__)
-app.secret_key = 'supersecretkey'  # Cambia questa chiave con una chiave segreta sicura
+app.secret_key = 'supersecretkey'
 socketio = SocketIO(app)
 
 # Connessione a Redis
 try:
-    r = redis.Redis(host='redis-17465.c328.europe-west3-1.gce.redns.redis-cloud.com',
-                    port=17465, db=0, charset="utf-8", decode_responses=True,
-                    password="FbLFAtUtlUz7j436R9kA0OkAYNUzZMi6")
+    r = redis.Redis(
+        host='redis-17465.c328.europe-west3-1.gce.redns.redis-cloud.com',
+        port=17465, db=0, charset="utf-8", decode_responses=True,
+        password="FbLFAtUtlUz7j436R9kA0OkAYNUzZMi6"
+    )
     r.ping()  # Controlla la connessione
     print("Connessione a Redis riuscita!")
 except redis.ConnectionError as e:
@@ -59,57 +61,36 @@ def home():
         return redirect(url_for('login'))
     username = session['username']
     contacts = get_contacts(username)
-    return render_template('home.html', username=username, contacts=contacts)
+    dnd = r.hget(username, 'dnd')
+    return render_template('home.html', username=username, contacts=contacts, dnd=dnd)
 
 @app.route('/logout')
 def logout():
     session.pop('username', None)
     return redirect(url_for('login'))
 
-@app.route('/add_contact', methods=['GET', 'POST'])
+@app.route('/add_contact', methods=['POST'])
 def add_contact():
     if 'username' not in session:
         return redirect(url_for('login'))
-    if request.method == 'POST':
-        username = session['username']
-        new_contact = request.form['new_contact']
-        if r.exists(new_contact):
-            add_contact_to_book(username, new_contact)
-            return redirect(url_for('home'))
-        else:
-            return "Utente non trovato."
-    return render_template('add_contact.html')
+    username = session['username']
+    new_contact = request.form['new_contact']
+    if r.exists(new_contact):
+        add_contact_to_book(username, new_contact)
+        return jsonify({"status": "success"})
+    else:
+        return jsonify({"status": "error", "message": "Utente non trovato"})
 
-@app.route('/remove_contact', methods=['GET', 'POST'])
+@app.route('/remove_contact', methods=['POST'])
 def remove_contact():
     if 'username' not in session:
         return redirect(url_for('login'))
-    if request.method == 'POST':
-        username = session['username']
-        contact_to_remove = request.form['contact_to_remove']
-        remove_contact_from_book(username, contact_to_remove)
-        return redirect(url_for('home'))
-    return render_template('remove_contact.html')
-
-@app.route('/contacts')
-def contacts():
-    if 'username' not in session:
-        return redirect(url_for('login'))
     username = session['username']
-    contacts = get_contacts(username)
-    return render_template('contacts.html', contacts=contacts)
+    contact_to_remove = request.form['contact_to_remove']
+    remove_contact_from_book(username, contact_to_remove)
+    return jsonify({"status": "success"})
 
-@app.route('/search', methods=['GET', 'POST'])
-def search():
-    if 'username' not in session:
-        return redirect(url_for('login'))
-    if request.method == 'POST':
-        search_query = request.form['search_query']
-        results = search_users(search_query)
-        return render_template('search_results.html', results=results)
-    return render_template('search.html')
-
-@app.route('/dnd', methods=['POST'])
+@app.route('/toggle_dnd', methods=['POST'])
 def toggle_dnd():
     if 'username' not in session:
         return redirect(url_for('login'))
@@ -117,6 +98,32 @@ def toggle_dnd():
     user_data = r.hgetall(username)
     new_dnd_status = "true" if user_data["dnd"] == "false" else "false"
     r.hset(username, "dnd", new_dnd_status)
+    return redirect(url_for('home'))
+
+@app.route('/profile', methods=['POST'])
+def update_profile():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    username = session['username']
+    new_username = request.form['new_username']
+    new_password = request.form['new_password']
+    avatar = request.files['avatar']
+
+    user_data = r.hgetall(username)
+    if new_username:
+        user_data['username'] = new_username
+    if new_password:
+        user_data['password'] = hash_password(new_password)
+    if avatar:
+        avatar_path = f'static/avatars/{username}.png'
+        avatar.save(avatar_path)
+        user_data['avatar'] = avatar_path
+
+    r.hset(new_username, mapping=user_data)
+    if new_username != username:
+        r.delete(username)
+        session['username'] = new_username
+
     return redirect(url_for('home'))
 
 @app.route('/chat/<contact>')
@@ -166,11 +173,6 @@ def add_contact_to_book(username, new_contact):
 def remove_contact_from_book(username, contact_to_remove):
     contacts_key = f"{username}_contacts"
     r.lrem(contacts_key, 0, contact_to_remove)
-
-def search_users(query):
-    all_users = r.keys('*')
-    matching_users = [user for user in all_users if query in user]
-    return matching_users
 
 def get_room_name(username, contact):
     participants = sorted([username, contact])

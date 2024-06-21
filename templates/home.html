@@ -12,7 +12,8 @@
         <!-- Contact List Column -->
         <div class="col-md-4 col-lg-3 bg-light border-right">
             <h3 class="mt-3">Contacts</h3>
-            <input type="text" class="form-control mb-3" placeholder="Search...">
+            <button id="add-btn" class="btn btn-primary mb-2">Add</button>
+            <button id="remove-btn" class="btn btn-danger mb-3">Remove</button>
             <ul class="list-group" id="contact-list">
                 {% for contact in contacts %}
                 <li class="list-group-item contact-item" data-contact="{{ contact }}">
@@ -21,10 +22,15 @@
                 </li>
                 {% endfor %}
             </ul>
+            <hr>
+            <h5>Do Not Disturb</h5>
+            <input type="checkbox" id="dnd-checkbox" {{ 'checked' if dnd == 'true' else '' }}> Enable
+            <hr>
+            <button id="profile-btn" class="btn btn-secondary">Profile</button>
         </div>
         <!-- Chat Column -->
-        <div class="col-md-8 col-lg-9">
-            <div id="chat-container" class="d-none">
+        <div class="col-md-8 col-lg-9 d-flex flex-column">
+            <div id="chat-container" class="d-none flex-grow-1">
                 <div class="d-flex align-items-center p-3 border-bottom">
                     <img src="{{ url_for('static', filename='avatar.png') }}" class="rounded-circle" width="50" alt="Avatar">
                     <div class="ml-3">
@@ -32,7 +38,7 @@
                         <small id="chat-contact-status">Last seen: 2 hours ago</small>
                     </div>
                 </div>
-                <div id="chat-messages" class="p-3 overflow-auto" style="height: 70vh;">
+                <div id="chat-messages" class="p-3 overflow-auto flex-grow-1">
                     <!-- Messages will be loaded here -->
                 </div>
                 <div class="input-group p-3 border-top">
@@ -42,8 +48,39 @@
                     </div>
                 </div>
             </div>
-            <div id="no-chat-selected" class="d-flex justify-content-center align-items-center h-100">
+            <div id="no-chat-selected" class="d-flex justify-content-center align-items-center flex-grow-1">
                 <h3>Select a contact to start chatting</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Profile Modal -->
+<div class="modal fade" id="profile-modal" tabindex="-1" role="dialog" aria-labelledby="profile-modal-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="profile-modal-label">Profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="profile-form" method="post" action="/profile" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="new-username">New Username</label>
+                        <input type="text" class="form-control" id="new-username" name="new_username">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password">New Password</label>
+                        <input type="password" class="form-control" id="new-password" name="new_password">
+                    </div>
+                    <div class="form-group">
+                        <label for="avatar">Avatar</label>
+                        <input type="file" class="form-control" id="avatar" name="avatar">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
             </div>
         </div>
     </div>
@@ -51,14 +88,15 @@
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script>
     $(document).ready(function() {
         var socket = io();
+        var username = '{{ username }}';
 
         // Handle contact click
         $('.contact-item').on('click', function() {
             var contact = $(this).data('contact');
-            var username = '{{ username }}';
             $('#chat-contact-name').text(contact);
             $('#chat-container').removeClass('d-none');
             $('#no-chat-selected').addClass('d-none');
@@ -68,11 +106,12 @@
             socket.emit('join', { username: username, room: room });
 
             // Load chat messages for the selected contact
-            $.get('/chat/' + contact + '?username=' + username, function(data) {
+            $.get('/chat/' + contact, function(data) {
                 $('#chat-messages').html(data.messages.map(function(message) {
-                    var msgClass = message.includes(username) ? 'text-right' : 'text-left';
+                    var msgClass = message.includes(username) ? 'sent-message' : 'received-message';
                     return `<div class="${msgClass}">${message}</div>`;
                 }).join(''));
+                $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
             });
         });
 
@@ -80,7 +119,6 @@
         $('#send-message').on('click', function() {
             var message = $('#message-input').val();
             var contact = $('#chat-contact-name').text();
-            var username = '{{ username }}';
             var room = getRoomName(username, contact);
 
             socket.emit('message', { room: room, message: message, username: username, contact: contact });
@@ -88,9 +126,48 @@
         });
 
         socket.on('message', function(data) {
-            var msgClass = data.username === '{{ username }}' ? 'text-right' : 'text-left';
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+            var msgClass = data.username === username ? 'sent-message' : 'received-message';
             $('#chat-messages').append(`<div class="${msgClass}">${data.timestamp} ${data.username}: ${data.message}</div>`);
             $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+        });
+
+        // Handle Add Contact
+        $('#add-btn').on('click', function() {
+            var newContact = prompt("Enter the username of the contact to add:");
+            if (newContact) {
+                $.post('/add_contact', { new_contact: newContact }, function(data) {
+                    if (data.status === "success") {
+                        location.reload();
+                    } else {
+                        alert(data.message);
+                    }
+                });
+            }
+        });
+
+        // Handle Remove Contact
+        $('#remove-btn').on('click', function() {
+            var contactToRemove = prompt("Enter the username of the contact to remove:");
+            if (contactToRemove) {
+                $.post('/remove_contact', { contact_to_remove: contactToRemove }, function() {
+                    location.reload();
+                });
+            }
+        });
+
+        // Handle DND
+        $('#dnd-checkbox').on('change', function() {
+            var dnd = $(this).is(':checked');
+            $.post('/toggle_dnd', { dnd: dnd });
+        });
+
+        // Handle Profile
+        $('#profile-btn').on('click', function() {
+            $('#profile-modal').modal('show');
         });
 
         function getRoomName(user1, user2) {
@@ -99,5 +176,23 @@
         }
     });
 </script>
+<style>
+    .sent-message {
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        border-radius: 10px;
+        margin: 5px;
+        padding: 10px;
+        text-align: right;
+    }
+    .received-message {
+        background-color: #f8f9fa;
+        border: 1px solid #dae0e5;
+        border-radius: 10px;
+        margin: 5px;
+        padding: 10px;
+        text-align: left;
+    }
+</style>
 </body>
 </html>
