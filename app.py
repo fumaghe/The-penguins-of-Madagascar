@@ -1,7 +1,7 @@
 import redis
 import hashlib
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
-from flask_socketio import SocketIO, join_room, leave_room, send, emit
+from flask_socketio import SocketIO, join_room, send, emit
 import datetime
 
 app = Flask(__name__)
@@ -34,7 +34,6 @@ def login():
             user_data = r.hgetall(username)
             if user_data.get("password") == hash_password(password):
                 session['username'] = username
-                r.hset(username, 'online', 'true')
                 return redirect(url_for('home'))
             else:
                 return "Password errata. Riprova."
@@ -50,7 +49,7 @@ def register():
         if r.exists(username):
             return "Nome utente già esistente. Scegli un nome diverso."
         else:
-            user_data = {"username": username, "password": hash_password(password), "dnd": "false", "online": "false"}
+            user_data = {"username": username, "password": hash_password(password), "dnd": "false"}
             r.hset(username, mapping=user_data)
             session['username'] = username
             return redirect(url_for('home'))
@@ -67,8 +66,6 @@ def home():
 
 @app.route('/logout')
 def logout():
-    if 'username' in session:
-        r.hset(session['username'], 'online', 'false')
     session.pop('username', None)
     return redirect(url_for('login'))
 
@@ -136,24 +133,14 @@ def chat(contact):
     username = session['username']
     room = get_room_name(username, contact)
     messages = get_chat_messages(room)
-    contact_data = r.hgetall(contact)
-    online_status = "Online" if contact_data.get("online") == "true" else "Offline"
-    return render_template('chat.html', username=username, contact=contact, messages=messages, room=room, contact_online=online_status)
+    return render_template('chat.html', username=username, contact=contact, messages=messages, room=room)
 
 @socketio.on('join')
 def on_join(data):
     username = data['username']
     room = data['room']
     join_room(room)
-    # Non inviare un messaggio di ingresso
-    emit('user_online', {'username': username, 'status': 'online'}, to=room)
-
-@socketio.on('leave')
-def on_leave(data):
-    username = data['username']
-    room = data['room']
-    leave_room(room)
-    emit('user_online', {'username': username, 'status': 'offline'}, to=room)
+    send({'message': f'{username} has entered the room.', 'username': 'system'}, to=room)
 
 @socketio.on('message')
 def on_message(data):
@@ -193,12 +180,7 @@ def get_room_name(username, contact):
 
 def get_chat_messages(room):
     chat_key = f"{room}_chat"
-    messages = r.lrange(chat_key, 0, -1)
-    chat_messages = []
-    for msg in messages:
-        timestamp, user, text = msg.split(" > ")
-        chat_messages.append({"timestamp": timestamp, "username": user, "message": text})
-    return chat_messages
+    return r.lrange(chat_key, 0, -1)
 
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0', port=5000, debug=True)
