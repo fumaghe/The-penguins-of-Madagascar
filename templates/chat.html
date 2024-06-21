@@ -1,61 +1,73 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Chat con {{ contact }}</title>
+    <meta charset="UTF-8">
+    <title>Chat</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            var socket = io();
-            var room = "{{ room }}";
-            var username = "{{ username }}";
-
-            socket.emit('join', { username: username, room: room });
-
-            socket.on('message', function(data) {
-                var messages = document.getElementById('messages');
-                var message = document.createElement('li');
-                var msgClass = data.username === username ? 'text-right bg-primary text-white' : 'text-left bg-light';
-                message.classList.add('list-group-item', msgClass);
-                message.innerHTML = `${data.timestamp} ${data.username}: ${data.message}`;
-                messages.appendChild(message);
-                messages.scrollTop = messages.scrollHeight;
-            });
-
-            socket.on('error', function(data) {
-                alert(data.msg);
-            });
-
-            document.getElementById('send').onclick = function() {
-                var message = document.getElementById('message').value;
-                socket.emit('message', { room: room, message: message, username: username, contact: "{{ contact }}" });
-                document.getElementById('message').value = '';
-            };
-        });
-    </script>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="mb-4">Chat con {{ contact }}</h1>
-        <ul id="messages" class="list-group mb-3">
-            {% for message in messages %}
-            {% set message_parts = message.split(' ', 2) %}
-            {% if message_parts[1].startswith(username) %}
-            <li class="list-group-item text-right bg-primary text-white">> {{ message_parts[0] }} {{ message_parts[1] }}</li>
-            {% else %}
-            <li class="list-group-item text-left bg-light">< {{ message_parts[0] }} {{ message_parts[1] }}</li>
-            {% endif %}
-            {% endfor %}
-        </ul>
-        <div class="input-group">
-            <input type="text" id="message" class="form-control" placeholder="Inserisci il messaggio">
-            <div class="input-group-append">
-                <button id="send" class="btn btn-primary">Invia</button>
+<div class="container-fluid">
+    <div class="row vh-100">
+        <!-- Chat Column -->
+        <div class="col-md-12">
+            <div class="chat-header">
+                <img src="{{ url_for('static', filename='avatar.png') }}" class="rounded-circle" width="40" alt="Avatar">
+                <h5>{{ contact }}</h5>
+                <span id="online-status">{{ contact_online }}</span>
+            </div>
+            <div class="chat-window" id="chat-window">
+                {% for message in messages %}
+                <div class="message {% if message.username == username %}outgoing{% else %}incoming{% endif %}">
+                    <span class="timestamp">{{ message.timestamp }}</span>
+                    <span class="username">{{ message.username }}</span>
+                    <span class="message-text">{{ message.message }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="chat-input">
+                <form id="message-form">
+                    <input type="text" id="message" placeholder="Enter text here..." class="form-control">
+                    <button type="submit" class="btn btn-primary">Send</button>
+                </form>
             </div>
         </div>
-        <br>
-        <a href="{{ url_for('home') }}" class="btn btn-secondary">Torna alla Home</a>
     </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+<script>
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+    $(document).ready(function(){
+        var room = "{{ room }}";
+        var username = "{{ username }}";
+        var contact = "{{ contact }}";
+
+        socket.emit('join', {'username': username, 'room': room});
+
+        $('#message-form').submit(function(e){
+            e.preventDefault();
+            var message = $('#message').val();
+            socket.emit('message', {'message': message, 'username': username, 'room': room, 'contact': contact});
+            $('#message').val('');
+        });
+
+        socket.on('message', function(data){
+            var messageElement = '<div class="message ' + (data.username == username ? 'outgoing' : 'incoming') + '">' +
+                '<span class="timestamp">' + data.timestamp + '</span>' +
+                '<span class="username">' + data.username + '</span>' +
+                '<span class="message-text">' + data.message + '</span>' +
+                '</div>';
+            $('#chat-window').append(messageElement);
+        });
+
+        socket.on('user_online', function(data){
+            if (data.username == contact) {
+                $('#online-status').text(data.status);
+            }
+        });
+    });
+</script>
 </body>
 </html>

@@ -1,36 +1,64 @@
-body {
-    background-color: #f8f9fa;
-}
-
-#messages {
-    height: 70vh;
-    overflow-y: scroll;
-    border: 1px solid #ddd;
+.chat-header {
+    display: flex;
+    align-items: center;
     padding: 10px;
-    background-color: #ffffff;
+    background: #f1f1f1;
+    border-bottom: 1px solid #ddd;
 }
 
-.text-right {
+.chat-header img {
+    margin-right: 10px;
+}
+
+.chat-header h5 {
+    margin: 0;
+    margin-right: 10px;
+}
+
+.chat-header #online-status {
+    color: green;
+}
+
+.chat-window {
+    height: calc(100vh - 150px);
+    overflow-y: scroll;
+    padding: 20px;
+    background: #f9f9f9;
+}
+
+.message {
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    max-width: 60%;
+}
+
+.incoming {
+    background: #e1ffc7;
+    align-self: flex-start;
+}
+
+.outgoing {
+    background: #dcf8c6;
+    align-self: flex-end;
     text-align: right;
 }
 
-.text-left {
-    text-align: left;
+.timestamp, .username {
+    display: block;
+    font-size: 12px;
 }
 
-.bg-primary {
-    background-color: #007bff !important;
-    color: #ffffff;
+.message-text {
+    margin-top: 5px;
+    font-size: 14px;
 }
 
-.bg-light {
-    background-color: #f8f9fa !important;
-}
-
-.contact-item {
-    cursor: pointer;
-}
-
-.contact-item:hover {
-    background-color: #f1f1f1;
+.chat-input {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    background: #fff;
+    border-top: 1px solid #ddd;
 }
