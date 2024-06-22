@@ -186,19 +186,19 @@ input:checked + .slider:before {
 }
 
 .sent-message {
-    background-color: #000080; /* Blu navy */
-    border: 1px solid #000080;
+    background-color: #cd3434; /* Blu navy */
+    border: 1px solid #cd3434;
     text-align: left;
     align-self: flex-end;
-    color: white;
+    color: #000000;
 }
 
 .received-message {
-    background-color: #228B22; /* Verde */
-    border: 1px solid #228B22;
+    background-color: #e7e746; /* Verde */
+    border: 1px solid #e7e746;
     text-align: left;
     align-self: flex-start;
-    color: white;
+    color: #000000;
 }
 
 .message-timestamp {
