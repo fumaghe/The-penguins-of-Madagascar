@@ -223,17 +223,18 @@
 <style>
     .sent-message, .received-message {
         border-radius: 20px; /* Arrotonda gli angoli del bordo */
-        margin: 10px 0; /* Aggiunge margine sopra e sotto */
-        padding: 12px 20px; /* Aggiunge padding interno */
+        margin: 15px 0; /* Aggiunge margine sopra e sotto */
+        padding: 10px 17px; /* Aggiunge padding interno */
         max-width: 75%; /* Imposta la larghezza massima */
+        min-width: 30%; /* Imposta la larghezza minima */
         word-wrap: break-word; /* Fa andare a capo le parole lunghe */
         position: relative; /* Posizionamento relativo per gli pseudoelementi */
-        font-size: 18px; /* Dimensione del testo */
+        font-size: 15px; /* Dimensione del testo */
         line-height: 1.75; /* Altezza della linea */
         display: block; /* Assicura che i messaggi siano visualizzati verticalmente */
         clear: both; /* Assicura che i messaggi non si affianchino */
     }
-
+    
     .sent-message {
         background: linear-gradient(120deg, #248A52, #257287); /* Sfondo a gradiente */
         border-radius: 20px 20px 0 20px; /* Arrotonda gli angoli */
@@ -241,7 +242,7 @@
         text-align: right; /* Testo allineato a destra */
         color: #fff; /* Colore del testo */
     }
-
+    
     .sent-message::before {
         content: "";
         position: absolute;
@@ -251,13 +252,14 @@
         border-left: 9px solid transparent;
         border-top: 7.5px solid #257287; /* Colore del triangolo */
     }
-
+    
     .received-message {
         background: rgba(0, 0, 0, 0.3); /* Sfondo semi-trasparente */
         border-radius: 20px 20px 20px 0; /* Arrotonda gli angoli */
         margin: 10px 0; /* Margine sopra e sotto */
         padding: 12px 20px; /* Padding interno */
-        max-width: 75%; /* Larghezza massima */
+        max-width: 30%; /* Larghezza massima */
+        min-width: 20%; /* Larghezza minima */
         word-wrap: break-word; /* Fa andare a capo le parole lunghe */
         position: relative; /* Posizionamento relativo per gli pseudoelementi */
         font-size: 18px; /* Dimensione del testo */
@@ -269,7 +271,7 @@
         color: rgba(255, 255, 255, 0.5); /* Colore del testo */
         margin-left: 65px; /* Margine a sinistra per spazio avatar */
     }
-
+    
     .received-message::before {
         content: "";
         position: absolute;
@@ -278,15 +280,15 @@
         border-top: 7.5px solid rgba(0, 0, 0, 0.3); /* Colore del triangolo */
         border-right: 9px solid transparent;
     }
-
+    
     .message-timestamp {
         display: block;
-        font-size: 15px; /* Dimensione del font */
+        font-size: 12px; /* Dimensione del font */
         text-align: right;
         color: rgba(255, 255, 255, 0.3); /* Colore del testo */
         position: absolute;
-        bottom: -20px; /* Posiziona il timestamp sotto il messaggio */
-        right: 20px; /* Allinea il timestamp a destra */
+        bottom: -30px; /* Posiziona il timestamp sotto il messaggio */
+        right: 0px; /* Allinea il timestamp a destra */
     }
 </style>
 </body>
