@@ -1,6 +1,6 @@
 /* General Layout */
 * {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'Proggy', monospace;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -21,15 +21,18 @@ body {
 
 /* Sidebar */
 .sidebar {
-    background-color: #000080;
+    background-color: #191970;
     color: white;
     padding: 20px;
     border-right: 1px solid #e6ecf3;
 }
 
 .sidebar h1 {
-    font-size: 1.5rem;
+    font-size: 2rem;
     margin-bottom: 1rem;
+    font-weight: bold;
+    border-bottom: 1px solid white; /* Linea bianca sotto Whatsup */
+    padding-bottom: 0.5rem;
 }
 
 .sidebar h3 {
@@ -46,6 +49,9 @@ body {
 .sidebar .btn-group {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 1rem; /* Spazio tra bottoni e le chat */
+    border-bottom: 1px solid white; /* Linea bianca sotto i bottoni */
+    padding-bottom: 0.5rem;
 }
 
 .sidebar button {
@@ -67,7 +73,7 @@ body {
     border: none;
     border-bottom: 1px solid #e6ecf3;
     cursor: pointer;
-    background-color: #000080;
+    background-color: #191970;
     color: white;
     font-weight: bold;
 }
@@ -81,7 +87,52 @@ body {
 }
 
 #dnd-checkbox {
-    margin-left: 10px;
+    display: none;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 20px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #6495ED;
+}
+
+input:checked + .slider:before {
+    transform: translateX(14px);
 }
 
 /* Chat Area */

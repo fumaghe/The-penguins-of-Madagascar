@@ -27,7 +27,10 @@
             </ul>
             <hr>
             <h5>Do Not Disturb</h5>
-            <input type="checkbox" id="dnd-checkbox" {{ 'checked' if dnd == 'true' else '' }}> Enable
+            <label class="switch">
+                <input type="checkbox" id="dnd-checkbox" {{ 'checked' if dnd == 'true' else '' }}>
+                <span class="slider"></span>
+            </label>
             <hr>
             <button id="profile-btn" class="btn btn-secondary">Profile</button>
             <button id="search-btn" class="btn btn-secondary">Search Users</button>
