@@ -169,6 +169,7 @@ def on_message(data):
         r.rpush(chat_key, formatted_message)
         send({'message': message, 'username': username, 'timestamp': timestamp}, to=room)
 
+
 def get_contacts(username):
     contacts_key = f"{username}_contacts"
     if not r.exists(contacts_key):

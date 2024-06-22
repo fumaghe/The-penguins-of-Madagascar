@@ -179,23 +179,24 @@ input:checked + .slider:before {
 }
 
 .sent-message, .received-message {
-    border-radius: 10px;
+    border-radius: 15px;
     margin: 5px 0;
-    padding: 10px;
-    max-width: 60%; /* Box più corti */
+    padding: 10px 20px;
+    max-width: 75%; /* Box più corti */
+    word-wrap: break-word;
 }
 
 .sent-message {
-    background-color: #cd3434; /* Blu navy */
-    border: 1px solid #cd3434;
+    background-color: #0084ff; /* Blu chiaro */
+    border: 1px solid #0084ff;
     text-align: left;
     align-self: flex-end;
-    color: #000000;
+    color: #ffffff;
 }
 
 .received-message {
-    background-color: #e7e746; /* Verde */
-    border: 1px solid #e7e746;
+    background-color: #f1f0f0; /* Grigio chiaro */
+    border: 1px solid #f1f0f0;
     text-align: left;
     align-self: flex-start;
     color: #000000;
@@ -205,7 +206,7 @@ input:checked + .slider:before {
     display: block;
     font-size: 0.75rem;
     text-align: right;
-    color: #ccc;
+    color: #666666;
 }
 
 /* Scrollbar */
