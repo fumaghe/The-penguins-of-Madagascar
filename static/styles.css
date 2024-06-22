@@ -229,7 +229,7 @@ body::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb {
     position: sticky;
     top: 0;
     z-index: 1;
-    width: calc(100% - 320px); /* Larghezza completa meno la larghezza della sidebar */
+    width: 110%; /* Larghezza completa meno la larghezza della sidebar */
     margin-left: -15px; /* Sposta a destra per evitare spazio a sinistra */
 }
 
