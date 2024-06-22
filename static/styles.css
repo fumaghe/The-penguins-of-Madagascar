@@ -59,6 +59,14 @@ body {
     padding-bottom: 0.5rem;
 }
 
+.sidebar .contact-item img {
+    width: 30px; /* Adatta la dimensione dell'immagine dei contatti */
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover; /* Assicura che l'immagine si adatti correttamente */
+    margin-right: 10px; /* Aggiunge uno spazio tra l'immagine e il testo */
+}
+
 .sidebar button {
     width: 48%;
     margin-bottom: 10px;
@@ -274,8 +282,10 @@ body::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb {
 }
 
 .chat-head img {
-    border-radius: 50%; /* Arrotonda completamente gli angoli dell'immagine */
-    margin-right: 15px; /* Aggiunge 15px di margine a destra */
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover; /* Assicura che l'immagine si adatti correttamente */
 }
 
 .chat-head .chat-contact-name {

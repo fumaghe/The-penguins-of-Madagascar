@@ -49,7 +49,13 @@ def register():
         if r.exists(username):
             return "Nome utente già esistente. Scegli un nome diverso."
         else:
-            user_data = {"username": username, "password": hash_password(password), "dnd": "false"}
+            avatar_path = 'static/foto profilo.png'  # Percorso dell'immagine avatar di default
+            user_data = {
+                "username": username,
+                "password": hash_password(password),
+                "dnd": "false",
+                "avatar": avatar_path  # Aggiungi il percorso dell'avatar ai dati utente
+            }
             r.hset(username, mapping=user_data)
             session['username'] = username
             return redirect(url_for('home'))
@@ -62,7 +68,8 @@ def home():
     username = session['username']
     contacts = get_contacts(username)
     dnd = r.hget(username, 'dnd')
-    return render_template('home.html', username=username, contacts=contacts, dnd=dnd)
+    avatar = r.hget(username, 'avatar')
+    return render_template('home.html', username=username, contacts=contacts, dnd=dnd, avatar=avatar)
 
 @app.route('/logout')
 def logout():
@@ -150,7 +157,7 @@ def on_join(data):
     username = data['username']
     room = data['room']
     join_room(room)
-    send({'message': f'{username} has entered the room.', 'username': 'system', 'timestamp': datetime.datetime.now().strftime("%H:%M")}, to=room)
+    send({'message': f'{username} has entered the room.', 'username': 'system'}, to=room)
 
 @socketio.on('message')
 def on_message(data):
@@ -164,7 +171,7 @@ def on_message(data):
     if contact_data.get("dnd") == "true":
         emit('error', {'msg': 'L\'utente è in modalità Do Not Disturb.'}, to=request.sid)
     else:
-        timestamp = datetime.datetime.now().strftime("%H:%M")
+        timestamp = datetime.datetime.now().strftime("%H:%M")  # Modifica qui per mostrare solo ora e minuto
         formatted_message = f"{timestamp} > {username}: {message}"
         r.rpush(chat_key, formatted_message)
         send({'message': message, 'username': username, 'timestamp': timestamp}, to=room)

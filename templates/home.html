@@ -20,7 +20,7 @@
             <ul class="list-group" id="contact-list">
                 {% for contact in contacts %}
                 <li class="list-group-item contact-item" data-contact="{{ contact }}">
-                    <img src="{{ url_for('static', filename='avatar.png') }}" class="rounded-circle" width="30" alt="Avatar">
+                    <img src="{{ url_for('static', filename='foto profilo.png') }}" class="rounded-circle" alt="Avatar">
                     {{ contact }}
                 </li>
                 {% endfor %}
@@ -41,7 +41,7 @@
             <div id="chat-container" class="flex-grow-1 d-flex flex-column">
                 <!-- Chat Head -->
                 <div class="chat-head d-flex align-items-center p-3 border-bottom">
-                    <img src="{{ url_for('static', filename='avatar.png') }}" class="rounded-circle" width="50" alt="Avatar">
+                    <img src="{{ url_for('static', filename='foto profilo.png') }}" class="rounded-circle" alt="Avatar">
                     <div class="ml-3">
                         <h5 class="chat-contact-name" id="chat-contact-name"></h5>
                         <small class="chat-contact-status" id="chat-contact-status">Last seen: 2 hours ago</small>
@@ -225,7 +225,7 @@
         border-radius: 20px; /* Arrotonda gli angoli del bordo */
         margin: 15px 0; /* Aggiunge margine sopra e sotto */
         padding: 10px 17px; /* Aggiunge padding interno */
-        max-width: 75%; /* Imposta la larghezza massima */
+        max-width: 30%; /* Imposta la larghezza massima */
         min-width: 30%; /* Imposta la larghezza minima */
         word-wrap: break-word; /* Fa andare a capo le parole lunghe */
         position: relative; /* Posizionamento relativo per gli pseudoelementi */
