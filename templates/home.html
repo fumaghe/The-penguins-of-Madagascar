@@ -37,7 +37,7 @@
         </div>
         <!-- Chat Column -->
         <div class="col-md-8 col-lg-9 offset-md-4 offset-lg-3 d-flex flex-column">
-            <div id="chat-container" class="flex-grow-1">
+            <div id="chat-container" class="flex-grow-1 d-flex flex-column">
                 <div class="chat-head d-flex align-items-center p-3 border-bottom">
                     <img src="{{ url_for('static', filename='avatar.png') }}" class="rounded-circle" width="50" alt="Avatar">
                     <div class="ml-3">
@@ -47,6 +47,12 @@
                 </div>
                 <div id="chat-messages" class="chat-messages p-3 overflow-auto flex-grow-1">
                     <!-- Messages will be loaded here -->
+                    {% for message in messages %}
+                        <div class="{{ 'sent-message' if message.sender == username else 'received-message' }}">
+                            {{ message.text }}
+                            <span class="message-timestamp">{{ message.timestamp }}</span>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
             <div class="input-group-container">
@@ -137,8 +143,8 @@
             // Load chat messages for the selected contact
             $.get('/chat/' + contact, function(data) {
                 $('#chat-messages').html(data.messages.map(function(message) {
-                    var msgClass = message.includes(username) ? 'sent-message' : 'received-message';
-                    return '<div class="' + msgClass + '">' + message + '</div>';
+                    var msgClass = message.sender === username ? 'sent-message' : 'received-message';
+                    return '<div class="' + msgClass + '">' + message.text + '<span class="message-timestamp">' + message.timestamp + '</span></div>';
                 }).join(''));
                 $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
             });
@@ -166,7 +172,7 @@
                 return;
             }
             var msgClass = data.username === username ? 'sent-message' : 'received-message';
-            $('#chat-messages').append('<div class="' + msgClass + '">' + data.timestamp + ' ' + data.username + ': ' + data.message + '</div>');
+            $('#chat-messages').append('<div class="' + msgClass + '">' + data.message + '<span class="message-timestamp">' + data.timestamp + '</span></div>');
             $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
         });
 
@@ -218,24 +224,32 @@
 </script>
 <style>
     .sent-message {
-        background-color: #d4edda;
-        border: 1px solid #c3e6cb;
+        background-color: #000080;
+        border: 1px solid #000080;
         border-radius: 10px;
-        margin: 5px;
+        margin: 5px 0;
         padding: 10px;
-        text-align: right;
-        background-color: #e7f3ff;
-        color: #333;
+        max-width: 60%;
+        text-align: left;
+        align-self: flex-end;
+        color: white;
     }
     .received-message {
-        background-color: #f8f9fa;
-        border: 1px solid #dae0e5;
+        background-color: #228B22;
+        border: 1px solid #228B22;
         border-radius: 10px;
-        margin: 5px;
+        margin: 5px 0;
         padding: 10px;
+        max-width: 60%;
         text-align: left;
-        background-color: #ffffff;
-        color: #333;
+        align-self: flex-start;
+        color: white;
+    }
+    .message-timestamp {
+        display: block;
+        font-size: 0.75rem;
+        text-align: right;
+        color: #ccc;
     }
 </style>
 </body>

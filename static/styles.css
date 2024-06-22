@@ -7,8 +7,9 @@
 }
 
 body {
-    background: #f7f9fc;
-    color: #333;
+    background: #191970; /* Blu notte */
+    color: white; /* Scritte in bianco */
+    overflow: hidden; /* Evita lo scrolling del body */
 }
 
 .container-fluid {
@@ -21,21 +22,21 @@ body {
 
 /* Sidebar */
 .sidebar {
-    background-color: #191970;
+    background-color: #000033; /* Blu ancora più scuro */
     color: white;
     padding: 20px;
     border-right: 1px solid #e6ecf3;
-    position: fixed; /* Aggiunta per fissare la sidebar */
-    height: 100%; /* Aggiunta per fissare la sidebar */
-    width: 300px; /* Aggiunta per fissare la sidebar */
-    overflow-y: auto; /* Aggiunta per fissare la sidebar */
+    position: fixed;
+    height: 100%;
+    width: 320px; /* Allarga leggermente la sidebar */
+    overflow-y: auto;
 }
 
 .sidebar h1 {
     font-size: 2rem;
     margin-bottom: 1rem;
     font-weight: bold;
-    border-bottom: 1px solid white; /* Linea bianca sotto Whatsup */
+    border-bottom: 1px solid white;
     padding-bottom: 0.5rem;
 }
 
@@ -53,8 +54,8 @@ body {
 .sidebar .btn-group {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 1rem; /* Spazio tra bottoni e le chat */
-    border-bottom: 1px solid white; /* Linea bianca sotto i bottoni */
+    margin-bottom: 1rem;
+    border-bottom: 1px solid white;
     padding-bottom: 0.5rem;
 }
 
@@ -77,7 +78,7 @@ body {
     border: none;
     border-bottom: 1px solid #e6ecf3;
     cursor: pointer;
-    background-color: #191970;
+    background-color: #000033;
     color: white;
     font-weight: bold;
 }
@@ -181,25 +182,30 @@ input:checked + .slider:before {
     border-radius: 10px;
     margin: 5px 0;
     padding: 10px;
-    max-width: 70%;
+    max-width: 60%; /* Box più corti */
 }
 
 .sent-message {
-    background-color: #d4edda;
-    border: 1px solid #c3e6cb;
-    text-align: right;
+    background-color: #000080; /* Blu navy */
+    border: 1px solid #000080;
+    text-align: left;
     align-self: flex-end;
-    background-color: #e7f3ff;
-    color: #333;
+    color: white;
 }
 
 .received-message {
-    background-color: #f8f9fa;
-    border: 1px solid #dae0e5;
+    background-color: #228B22; /* Verde */
+    border: 1px solid #228B22;
     text-align: left;
     align-self: flex-start;
-    background-color: #ffffff;
-    color: #333;
+    color: white;
+}
+
+.message-timestamp {
+    display: block;
+    font-size: 0.75rem;
+    text-align: right;
+    color: #ccc;
 }
 
 /* Scrollbar */
@@ -218,11 +224,12 @@ body::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb {
     align-items: center;
     padding: 10px;
     border-bottom: 1px solid #e6ecf3;
-    background-color: #ffffff;
-    position: sticky; /* Aggiunta per fissare la chat head */
-    top: 0; /* Aggiunta per fissare la chat head */
-    z-index: 1; /* Aggiunta per fissare la chat head */
-    width: calc(100% - 300px); /* Aggiunta per fissare la chat head */
+    background-color: #000033; /* Blu ancora più scuro */
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    width: calc(100% - 320px); /* Larghezza completa meno la larghezza della sidebar */
+    left: 320px; /* Allineamento con la sidebar */
 }
 
 .chat-head img {
@@ -232,7 +239,7 @@ body::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb {
 
 .chat-head .chat-contact-name {
     font-weight: 600;
-    color: #4a4a4a;
+    color: white;
 }
 
 .chat-head .chat-contact-status {
@@ -240,18 +247,23 @@ body::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb {
 }
 
 .chat-messages {
-    background-color: #f7f9fc;
-    padding-bottom: 60px; /* Altezza approssimativa della barra dei messaggi */
+    background-color: #191970; /* Blu notte */
+    padding-bottom: 60px;
+    height: calc(100vh - 160px); /* Altezza fissa per la sezione dei messaggi */
+    overflow-y: auto; /* Abilita lo scrolling verticale */
+    width: calc(100% - 320px); /* Larghezza completa meno la larghezza della sidebar */
+    margin-left: 320px; /* Allineamento con la sidebar */
 }
 
 /* Fissa la barra dei messaggi in basso */
 .input-group-container {
     position: fixed;
     bottom: 0;
-    width: calc(100% - 300px); /* Larghezza meno la larghezza della sidebar */
+    width: calc(100% - 320px); /* Compensare la larghezza della sidebar */
     background-color: white;
     padding: 10px;
     border-top: 1px solid #e6ecf3;
+    left: 320px; /* Assicurati che sia allineata correttamente con la sidebar */
 }
 
 .input-group .form-control {
