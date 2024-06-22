@@ -5,6 +5,17 @@
     <title>Chat App</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* Chat Messages */
+        .chat-messages {
+            background: url('{{ url_for('static', filename='sfondo.png') }}') no-repeat center center fixed;
+            background-size: cover;
+            padding-bottom: 60px;
+            height: calc(100vh - 160px);
+            overflow-y: auto;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
 <div class="container-fluid">
@@ -20,7 +31,7 @@
             <ul class="list-group" id="contact-list">
                 {% for contact in contacts %}
                 <li class="list-group-item contact-item" data-contact="{{ contact }}">
-                    <img src="{{ url_for('static', filename='foto profilo.png') }}" class="rounded-circle" alt="Avatar">
+                    <img src="{{ url_for('static', filename='avatar.png') }}" class="rounded-circle" width="30" alt="Avatar">
                     {{ contact }}
                 </li>
                 {% endfor %}
@@ -41,7 +52,7 @@
             <div id="chat-container" class="flex-grow-1 d-flex flex-column">
                 <!-- Chat Head -->
                 <div class="chat-head d-flex align-items-center p-3 border-bottom">
-                    <img src="{{ url_for('static', filename='foto profilo.png') }}" class="rounded-circle" alt="Avatar">
+                    <img src="{{ url_for('static', filename='avatar.png') }}" class="rounded-circle" width="50" alt="Avatar">
                     <div class="ml-3">
                         <h5 class="chat-contact-name" id="chat-contact-name"></h5>
                         <small class="chat-contact-status" id="chat-contact-status">Last seen: 2 hours ago</small>
@@ -220,76 +231,5 @@
         }
     });
 </script>
-<style>
-    .sent-message, .received-message {
-        border-radius: 20px; /* Arrotonda gli angoli del bordo */
-        margin: 15px 0; /* Aggiunge margine sopra e sotto */
-        padding: 10px 17px; /* Aggiunge padding interno */
-        max-width: 30%; /* Imposta la larghezza massima */
-        min-width: 30%; /* Imposta la larghezza minima */
-        word-wrap: break-word; /* Fa andare a capo le parole lunghe */
-        position: relative; /* Posizionamento relativo per gli pseudoelementi */
-        font-size: 15px; /* Dimensione del testo */
-        line-height: 1.75; /* Altezza della linea */
-        display: block; /* Assicura che i messaggi siano visualizzati verticalmente */
-        clear: both; /* Assicura che i messaggi non si affianchino */
-    }
-    
-    .sent-message {
-        background: linear-gradient(120deg, #248A52, #257287); /* Sfondo a gradiente */
-        border-radius: 20px 20px 0 20px; /* Arrotonda gli angoli */
-        float: right; /* Allinea a destra */
-        text-align: right; /* Testo allineato a destra */
-        color: #fff; /* Colore del testo */
-    }
-    
-    .sent-message::before {
-        content: "";
-        position: absolute;
-        bottom: -7.5px;
-        right: 0;
-        border-right: none;
-        border-left: 9px solid transparent;
-        border-top: 7.5px solid #257287; /* Colore del triangolo */
-    }
-    
-    .received-message {
-        background: rgba(0, 0, 0, 0.3); /* Sfondo semi-trasparente */
-        border-radius: 20px 20px 20px 0; /* Arrotonda gli angoli */
-        margin: 10px 0; /* Margine sopra e sotto */
-        padding: 12px 20px; /* Padding interno */
-        max-width: 30%; /* Larghezza massima */
-        min-width: 20%; /* Larghezza minima */
-        word-wrap: break-word; /* Fa andare a capo le parole lunghe */
-        position: relative; /* Posizionamento relativo per gli pseudoelementi */
-        font-size: 18px; /* Dimensione del testo */
-        line-height: 1.75; /* Altezza della linea */
-        display: block; /* Assicura che i messaggi siano visualizzati verticalmente */
-        clear: both; /* Assicura che i messaggi non si affianchino */
-        text-align: left; /* Testo allineato a sinistra */
-        align-self: flex-start; /* Allinea il messaggio a sinistra */
-        color: rgba(255, 255, 255, 0.5); /* Colore del testo */
-        margin-left: 65px; /* Margine a sinistra per spazio avatar */
-    }
-    
-    .received-message::before {
-        content: "";
-        position: absolute;
-        bottom: -7.5px;
-        left: 0;
-        border-top: 7.5px solid rgba(0, 0, 0, 0.3); /* Colore del triangolo */
-        border-right: 9px solid transparent;
-    }
-    
-    .message-timestamp {
-        display: block;
-        font-size: 12px; /* Dimensione del font */
-        text-align: right;
-        color: rgba(255, 255, 255, 0.3); /* Colore del testo */
-        position: absolute;
-        bottom: -30px; /* Posiziona il timestamp sotto il messaggio */
-        right: 0px; /* Allinea il timestamp a destra */
-    }
-</style>
 </body>
 </html>

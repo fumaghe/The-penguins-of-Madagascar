@@ -7,8 +7,8 @@
 }
 
 body {
-    background: #191970; /* Blu notte */
-    color: white; /* Scritte in bianco */
+    background: #000; /* Nero */
+    color: #00FF00; /* Verde fluo */
     overflow: hidden; /* Evita lo scrolling del body */
 }
 
@@ -22,10 +22,10 @@ body {
 
 /* Sidebar */
 .sidebar {
-    background-color: #000033; /* Blu ancora più scuro */
-    color: white;
+    background-color: #000; /* Nero */
+    color: #00FF00; /* Verde fluo */
     padding: 20px;
-    border-right: 1px solid #e6ecf3;
+    border-right: 1px solid #fff; /* Linea divisoria bianca */
     position: fixed;
     height: 100%;
     width: 320px; /* Larghezza fissa della sidebar */
@@ -36,26 +36,27 @@ body {
     font-size: 2rem;
     margin-bottom: 1rem;
     font-weight: bold;
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid #fff; /* Linea divisoria bianca */
     padding-bottom: 0.5rem;
+    color: #00FF00; /* Verde fluo */
 }
 
 .sidebar h3 {
     font-size: 1.2rem;
     margin-bottom: 1rem;
-    color: white;
+    color: #00FF00; /* Verde fluo */
 }
 
 .sidebar h5 {
     font-weight: 600;
-    color: white;
+    color: #00FF00; /* Verde fluo */
 }
 
 .sidebar .btn-group {
     display: flex;
     justify-content: space-between;
     margin-bottom: 1rem;
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid #fff; /* Linea divisoria bianca */
     padding-bottom: 0.5rem;
 }
 
@@ -70,13 +71,13 @@ body {
 .sidebar button {
     width: 48%;
     margin-bottom: 10px;
-    background-color: #6495ED;
-    border: 1px solid white;
-    color: white;
+    background-color: #00FF00; /* Verde fluo */
+    border: 1px solid #fff; /* Bordo bianco */
+    color: #000; /* Nero */
 }
 
 .sidebar button:hover {
-    background-color: #537EC0;
+    background-color: #00cc00; /* Verde più scuro */
 }
 
 .sidebar .list-group-item {
@@ -84,15 +85,15 @@ body {
     align-items: center;
     padding: 10px;
     border: none;
-    border-bottom: 1px solid #e6ecf3;
+    border-bottom: 1px solid #fff; /* Linea divisoria bianca */
     cursor: pointer;
-    background-color: #000033;
-    color: white;
+    background-color: #000; /* Nero */
+    color: #00FF00; /* Verde fluo */
     font-weight: bold;
 }
 
 .sidebar .list-group-item:hover {
-    background-color: #1E1E70;
+    background-color: #333; /* Grigio scuro */
 }
 
 .sidebar .rounded-circle {
@@ -141,7 +142,7 @@ body {
 }
 
 input:checked + .slider {
-    background-color: #6495ED;
+    background-color: #00FF00; /* Verde fluo */
 }
 
 input:checked + .slider:before {
@@ -162,11 +163,11 @@ input:checked + .slider:before {
 }
 
 .border-bottom {
-    border-bottom: 1px solid #e6ecf3 !important; /* Aggiunge un bordo inferiore */
+    border-bottom: 1px solid #fff !important; /* Aggiunge un bordo inferiore bianco */
 }
 
 .border-top {
-    border-top: 1px solid #e6ecf3 !important; /* Aggiunge un bordo superiore */
+    border-top: 1px solid #fff !important; /* Aggiunge un bordo superiore bianco */
 }
 
 .flex-grow-1 {
@@ -200,11 +201,11 @@ input:checked + .slider:before {
 }
 
 .sent-message {
-    background: linear-gradient(120deg, #248A52, #257287); /* Sfondo a gradiente */
+    background-color: #00FF00; /* Verde fluo */
     border-radius: 20px 20px 0 20px; /* Arrotonda gli angoli */
     float: right; /* Allinea a destra */
     text-align: right; /* Testo allineato a destra */
-    color: #fff; /* Colore del testo */
+    color: #000; /* Nero */
 }
 
 .sent-message::before {
@@ -214,11 +215,11 @@ input:checked + .slider:before {
     right: 0;
     border-right: none;
     border-left: 9px solid transparent;
-    border-top: 7.5px solid #257287; /* Colore del triangolo */
+    border-top: 7.5px solid #00FF00; /* Verde fluo */
 }
 
 .received-message {
-    background: rgba(0, 0, 0, 0.3); /* Sfondo semi-trasparente */
+    background-color: #fff; /* Bianco */
     border-radius: 20px 20px 20px 0; /* Arrotonda gli angoli */
     margin: 10px 0; /* Margine sopra e sotto */
     padding: 12px 20px; /* Padding interno */
@@ -231,7 +232,7 @@ input:checked + .slider:before {
     clear: both; /* Assicura che i messaggi non si affianchino */
     text-align: left; /* Testo allineato a sinistra */
     align-self: flex-start; /* Allinea il messaggio a sinistra */
-    color: rgba(255, 255, 255, 0.5); /* Colore del testo */
+    color: #000; /* Nero */
     margin-left: 65px; /* Margine a sinistra per spazio avatar */
 }
 
@@ -240,7 +241,7 @@ input:checked + .slider:before {
     position: absolute;
     bottom: -7.5px;
     left: 0;
-    border-top: 7.5px solid rgba(0, 0, 0, 0.3); /* Colore del triangolo */
+    border-top: 7.5px solid #fff; /* Bianco */
     border-right: 9px solid transparent;
 }
 
@@ -253,9 +254,6 @@ input:checked + .slider:before {
     bottom: -20px; /* Posiziona il timestamp sotto il messaggio */
     right: 20px; /* Allinea il timestamp a destra */
 }
-
-
-
 
 /* Scrollbar */
 body::-webkit-scrollbar, .overflow-auto::-webkit-scrollbar {
@@ -272,8 +270,8 @@ body::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb {
     display: flex; /* Imposta il display del contenitore come flexbox */
     align-items: center; /* Allinea gli elementi al centro verticalmente */
     padding: 10px; /* Aggiunge 10px di padding su tutti i lati */
-    border-bottom: 1px solid #e6ecf3; /* Aggiunge un bordo inferiore */
-    background-color: #000033; /* Imposta il colore di sfondo a blu scuro */
+    border-bottom: 1px solid #fff; /* Linea divisoria bianca */
+    background-color: #000; /* Nero */
     position: sticky; /* Rende l'elemento appiccicoso in cima durante lo scorrimento */
     top: 0; /* Allinea l'elemento al top */
     z-index: 1; /* Imposta lo z-index per assicurarsi che l'elemento rimanga in cima */
@@ -290,20 +288,21 @@ body::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb {
 
 .chat-head .chat-contact-name {
     font-weight: 600; /* Imposta il peso del font a 600 */
-    color: white; /* Imposta il colore del testo a bianco */
+    color: #00FF00; /* Verde fluo */
 }
 
 .chat-head .chat-contact-status {
-    color: #999; /* Imposta il colore del testo a grigio chiaro */
+    color: #fff; /* Bianco */
 }
 
 /* Chat Messages */
 .chat-messages {
-    background-color: #191970; /* Imposta il colore di sfondo a blu notte */
-    padding-bottom: 60px; /* Aggiunge 60px di padding sotto */
-    height: calc(100vh - 160px); /* Imposta l'altezza calcolando 100vh meno 160px */
-    overflow-y: auto; /* Abilita lo scrolling verticale */
-    width: 100%; /* Imposta la larghezza al 90% del contenitore genitore */
+    background-color: #000;
+    background-size: cover;
+    padding-bottom: 60px;
+    height: calc(100vh - 160px);
+    overflow-y: auto;
+    width: 100%;
 }
 
 /* Input Group Container */
@@ -311,26 +310,29 @@ body::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb {
     position: fixed; /* Posiziona il contenitore in modo fisso, relativo alla finestra del browser */
     bottom: 0; /* Allinea il contenitore al fondo della finestra */
     width: 78%; /* Imposta la larghezza del contenitore al 100% della finestra */
-    background-color: #191970; /* Imposta il colore di sfondo a bianco */
+    background-color: #000; /* Nero */
     padding: 20px 110px; /* Aggiunge uno spazio interno di 10px su tutti i lati */
-    border-top: 1px solid #191970; /* Aggiunge un bordo superiore di 1px con colore grigio chiaro */
+    border-top: 1px solid #fff; /* Linea divisoria bianca */
     margin-left: -15px; /* Sposta il contenitore 15px a sinistra */
 }
 
 .input-group .form-control {
-    border: 1px solid #e6ecf3; /* Imposta un bordo di 1px con colore grigio chiaro */
-    border-radius: 20px; /* Arrotonda gli angoli del bordo con un raggio di 20px */
-    padding: 10px 15px; /* Aggiunge uno spazio interno di 10px sopra/sotto e 15px a destra/sinistra */
-    box-shadow: none; /* Rimuove qualsiasi ombreggiatura dal bordo */
+    border: 1px solid #fff; /* Bordo bianco */
+    border-radius: 20px;
+    padding: 10px 15px;
+    box-shadow: none;
+    background-color: #000; /* Nero */
+    color: #00FF00; /* Verde fluo */
 }
 
 .input-group .btn-primary {
-    background-color: #4a90e2; /* Imposta il colore di sfondo del pulsante a blu */
-    border-color: #4a90e2; /* Imposta il colore del bordo del pulsante a blu */
-    border-radius: 20px; /* Arrotonda gli angoli del bordo con un raggio di 20px */
+    background-color: #00FF00; /* Verde fluo */
+    border-color: #00FF00; /* Verde fluo */
+    border-radius: 20px;
+    color: #000; /* Nero */
 }
 
 .input-group .btn-primary:hover {
-    background-color: #357ab7; /* Imposta il colore di sfondo del pulsante a blu scuro quando l'utente passa sopra */
-    border-color: #357ab7; /* Imposta il colore del bordo del pulsante a blu scuro quando l'utente passa sopra */
+    background-color: #00cc00; /* Verde più scuro */
+    border-color: #00cc00;
 }
