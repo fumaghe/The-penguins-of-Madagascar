@@ -36,8 +36,8 @@
             <button id="search-btn" class="btn btn-secondary">Search Users</button>
         </div>
         <!-- Chat Column -->
-        <div class="col-md-8 col-lg-9 d-flex flex-column">
-            <div id="chat-container" class="d-none flex-grow-1">
+        <div class="col-md-8 col-lg-9 offset-md-4 offset-lg-3 d-flex flex-column">
+            <div id="chat-container" class="flex-grow-1">
                 <div class="chat-head d-flex align-items-center p-3 border-bottom">
                     <img src="{{ url_for('static', filename='avatar.png') }}" class="rounded-circle" width="50" alt="Avatar">
                     <div class="ml-3">
@@ -48,15 +48,14 @@
                 <div id="chat-messages" class="chat-messages p-3 overflow-auto flex-grow-1">
                     <!-- Messages will be loaded here -->
                 </div>
-                <div class="input-group p-3 border-top">
+            </div>
+            <div class="input-group-container">
+                <div class="input-group">
                     <input type="text" id="message-input" class="form-control" placeholder="Type something here...">
                     <div class="input-group-append">
                         <button id="send-message" class="btn btn-primary">Send</button>
                     </div>
                 </div>
-            </div>
-            <div id="no-chat-selected" class="d-flex justify-content-center align-items-center flex-grow-1">
-                <h3>Select a contact to start chatting</h3>
             </div>
         </div>
     </div>

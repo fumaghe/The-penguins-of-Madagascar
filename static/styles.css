@@ -25,6 +25,10 @@ body {
     color: white;
     padding: 20px;
     border-right: 1px solid #e6ecf3;
+    position: fixed; /* Aggiunta per fissare la sidebar */
+    height: 100%; /* Aggiunta per fissare la sidebar */
+    width: 300px; /* Aggiunta per fissare la sidebar */
+    overflow-y: auto; /* Aggiunta per fissare la sidebar */
 }
 
 .sidebar h1 {
@@ -215,6 +219,10 @@ body::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb {
     padding: 10px;
     border-bottom: 1px solid #e6ecf3;
     background-color: #ffffff;
+    position: sticky; /* Aggiunta per fissare la chat head */
+    top: 0; /* Aggiunta per fissare la chat head */
+    z-index: 1; /* Aggiunta per fissare la chat head */
+    width: calc(100% - 300px); /* Aggiunta per fissare la chat head */
 }
 
 .chat-head img {
@@ -233,6 +241,17 @@ body::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb {
 
 .chat-messages {
     background-color: #f7f9fc;
+    padding-bottom: 60px; /* Altezza approssimativa della barra dei messaggi */
+}
+
+/* Fissa la barra dei messaggi in basso */
+.input-group-container {
+    position: fixed;
+    bottom: 0;
+    width: calc(100% - 300px); /* Larghezza meno la larghezza della sidebar */
+    background-color: white;
+    padding: 10px;
+    border-top: 1px solid #e6ecf3;
 }
 
 .input-group .form-control {
