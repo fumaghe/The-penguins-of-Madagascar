@@ -142,117 +142,118 @@ input:checked + .slider:before {
 
 /* Chat Area */
 .d-flex {
-    display: flex !important;
+    display: flex !important; /* Imposta il display del contenitore come flexbox */
 }
 
 .flex-column {
-    flex-direction: column !important;
+    flex-direction: column !important; /* Dispone i figli in una colonna verticale */
 }
 
 .p-3 {
-    padding: 1rem !important;
+    padding: 1rem !important; /* Aggiunge 1 rem di padding su tutti i lati */
 }
 
 .border-bottom {
-    border-bottom: 1px solid #e6ecf3 !important;
+    border-bottom: 1px solid #e6ecf3 !important; /* Aggiunge un bordo inferiore */
 }
 
 .border-top {
-    border-top: 1px solid #e6ecf3 !important;
+    border-top: 1px solid #e6ecf3 !important; /* Aggiunge un bordo superiore */
 }
 
 .flex-grow-1 {
-    flex-grow: 1 !important;
+    flex-grow: 1 !important; /* Fa crescere l'elemento per riempire lo spazio disponibile */
 }
 
 .overflow-auto {
-    overflow: auto !important;
+    overflow: auto !important; /* Abilita lo scorrimento automatico per il contenuto */
 }
 
 .input-group {
-    display: flex;
-    width: 100%;
+    display: flex; /* Imposta il display del contenitore come flexbox */
+    width: 100%; /* Imposta la larghezza al 100% del contenitore genitore */
 }
 
 .input-group-append {
-    margin-left: 10px;
+    margin-left: 10px; /* Aggiunge 10px di margine a sinistra */
 }
 
 .sent-message, .received-message {
-    border-radius: 15px;
-    margin: 5px 0;
-    padding: 10px 20px;
-    max-width: 45%; /* Box più corti */
-    word-wrap: break-word;
+    border-radius: 15px; /* Arrotonda gli angoli del bordo */
+    margin: 5px 0; /* Aggiunge 5px di margine sopra e sotto */
+    padding: 10px 20px; /* Aggiunge 10px di padding sopra/sotto e 20px a destra/sinistra */
+    max-width: 90%; /* Imposta la larghezza massima al 45% del contenitore genitore */
+    word-wrap: break-word; /* Fa andare a capo le parole lunghe */
 }
 
 .sent-message {
-    background-color: #0084ff; /* Blu chiaro */
-    border: 1px solid #0084ff;
-    text-align: right;
-    align-self: flex-end;
-    color: #ffffff;
+    background-color: #0084ff; /* Imposta il colore di sfondo a blu chiaro */
+    border: 1px solid #0084ff; /* Imposta un bordo di 1px di colore blu chiaro */
+    text-align: right; /* Allinea il testo a destra */
+    align-self: flex-end; /* Allinea il messaggio a destra del contenitore */
+    color: #ffffff; /* Imposta il colore del testo a bianco */
 }
 
 .received-message {
-    background-color: #f1f0f0; /* Grigio chiaro */
-    border: 1px solid #f1f0f0;
-    text-align: left;
-    align-self: flex-start;
-    color: #000000;
+    background-color: #f1f0f0; /* Imposta il colore di sfondo a grigio chiaro */
+    border: 1px solid #f1f0f0; /* Imposta un bordo di 1px di colore grigio chiaro */
+    text-align: left; /* Allinea il testo a sinistra */
+    align-self: flex-start; /* Allinea il messaggio a sinistra del contenitore */
+    color: #000000; /* Imposta il colore del testo a nero */
 }
 
 .message-timestamp {
-    display: block;
-    font-size: 0.75rem;
-    text-align: right;
-    color: #666666;
+    display: block; /* Imposta il display come blocco */
+    font-size: 0.75rem; /* Imposta la dimensione del font a 0.75 rem */
+    text-align: right; /* Allinea il testo a destra */
+    color: #666666; /* Imposta il colore del testo a grigio */
 }
 
 /* Scrollbar */
 body::-webkit-scrollbar, .overflow-auto::-webkit-scrollbar {
-    width: 0.5em;
+    width: 0.5em; /* Imposta la larghezza della scrollbar */
 }
 
 body::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb {
-    background-color: rgba(0,0,0,0.2);
-    border-radius: 10px;
+    background-color: rgba(0,0,0,0.2); /* Imposta il colore della thumb della scrollbar */
+    border-radius: 10px; /* Arrotonda gli angoli della thumb */
 }
 
 /* Chat Head */
 .chat-head {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #e6ecf3;
-    background-color: #000033; /* Blu ancora più scuro */
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    width: 110%; /* Larghezza completa meno la larghezza della sidebar */
-    margin-left: -15px; /* Sposta a destra per evitare spazio a sinistra */
+    display: flex; /* Imposta il display del contenitore come flexbox */
+    align-items: center; /* Allinea gli elementi al centro verticalmente */
+    padding: 10px; /* Aggiunge 10px di padding su tutti i lati */
+    border-bottom: 1px solid #e6ecf3; /* Aggiunge un bordo inferiore */
+    background-color: #000033; /* Imposta il colore di sfondo a blu scuro */
+    position: sticky; /* Rende l'elemento appiccicoso in cima durante lo scorrimento */
+    top: 0; /* Allinea l'elemento al top */
+    z-index: 1; /* Imposta lo z-index per assicurarsi che l'elemento rimanga in cima */
+    width: 110%; /* Imposta la larghezza al 110% del contenitore genitore */
+    margin-left: -15px; /* Sposta l'elemento a sinistra di 15px */
 }
 
 .chat-head img {
-    border-radius: 50%;
-    margin-right: 15px;
+    border-radius: 50%; /* Arrotonda completamente gli angoli dell'immagine */
+    margin-right: 15px; /* Aggiunge 15px di margine a destra */
 }
 
 .chat-head .chat-contact-name {
-    font-weight: 600;
-    color: white;
+    font-weight: 600; /* Imposta il peso del font a 600 */
+    color: white; /* Imposta il colore del testo a bianco */
 }
 
 .chat-head .chat-contact-status {
-    color: #999;
+    color: #999; /* Imposta il colore del testo a grigio chiaro */
 }
+
 /* Chat Messages */
 .chat-messages {
-    background-color: #191970; /* Blu notte */
-    padding-bottom: 60px;
-    height: calc(100vh - 160px); /* Altezza fissa per la sezione dei messaggi */
+    background-color: #191970; /* Imposta il colore di sfondo a blu notte */
+    padding-bottom: 60px; /* Aggiunge 60px di padding sotto */
+    height: calc(100vh - 160px); /* Imposta l'altezza calcolando 100vh meno 160px */
     overflow-y: auto; /* Abilita lo scrolling verticale */
-    width: calc(100% - 320px); /* Larghezza completa meno la larghezza della sidebar */
+    width: 90%; /* Imposta la larghezza al 90% del contenitore genitore */
 }
 
 /* Input Group Container */
