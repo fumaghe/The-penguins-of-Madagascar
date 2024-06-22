@@ -179,35 +179,61 @@ input:checked + .slider:before {
 }
 
 .sent-message, .received-message {
-    border-radius: 15px; /* Arrotonda gli angoli del bordo */
-    margin: 5px 0; /* Aggiunge 5px di margine sopra e sotto */
-    padding: 10px 20px; /* Aggiunge 10px di padding sopra/sotto e 20px a destra/sinistra */
-    max-width: 90%; /* Imposta la larghezza massima al 45% del contenitore genitore */
+    border-radius: 60px; /* Arrotonda gli angoli del bordo */
+    margin: 20px 0; /* Aggiunge margine sopra e sotto */
+    padding: 80px 160px; /* Aumenta il padding interno per ingrandire */
+    max-width: 90%; /* Imposta la larghezza massima */
     word-wrap: break-word; /* Fa andare a capo le parole lunghe */
+    position: relative; /* Posizionamento relativo per gli pseudoelementi */
+    font-size: 88px; /* Aumenta la dimensione del testo */
+    line-height: 1.4; /* Altezza della linea */
+    display: block; /* Assicura che i messaggi siano visualizzati verticalmente */
+    clear: both; /* Assicura che i messaggi non si affianchino */
 }
 
 .sent-message {
-    background-color: #0084ff; /* Imposta il colore di sfondo a blu chiaro */
-    border: 1px solid #0084ff; /* Imposta un bordo di 1px di colore blu chiaro */
-    text-align: right; /* Allinea il testo a destra */
-    align-self: flex-end; /* Allinea il messaggio a destra del contenitore */
-    color: #ffffff; /* Imposta il colore del testo a bianco */
+    background: linear-gradient(120deg, #248A52, #257287); /* Sfondo a gradiente */
+    border-radius: 60px 60px 0 60px; /* Arrotonda gli angoli */
+    float: right; /* Allinea a destra */
+    text-align: right; /* Testo allineato a destra */
+    color: #fff; /* Colore del testo */
+}
+
+.sent-message::before {
+    content: "";
+    position: absolute;
+    bottom: -24px;
+    right: 0;
+    border-right: none;
+    border-left: 60px solid transparent;
+    border-top: 48px solid #257287; /* Colore del triangolo */
 }
 
 .received-message {
-    background-color: #f1f0f0; /* Imposta il colore di sfondo a grigio chiaro */
-    border: 1px solid #f1f0f0; /* Imposta un bordo di 1px di colore grigio chiaro */
-    text-align: left; /* Allinea il testo a sinistra */
-    align-self: flex-start; /* Allinea il messaggio a sinistra del contenitore */
-    color: #000000; /* Imposta il colore del testo a nero */
+    background: rgba(0, 0, 0, 0.3); /* Sfondo semi-trasparente */
+    float: left; /* Allinea a sinistra */
+    text-align: left; /* Testo allineato a sinistra */
+    color: rgba(255, 255, 255, 0.5); /* Colore del testo */
+    margin-left: 140px; /* Margine a sinistra per spazio avatar */
+}
+
+.received-message::before {
+    content: "";
+    position: absolute;
+    bottom: -24px;
+    left: 0;
+    border-top: 48px solid rgba(0, 0, 0, 0.3); /* Colore del triangolo */
+    border-right: 60px solid transparent;
 }
 
 .message-timestamp {
-    display: block; /* Imposta il display come blocco */
-    font-size: 0.75rem; /* Imposta la dimensione del font a 0.75 rem */
-    text-align: right; /* Allinea il testo a destra */
-    color: #666666; /* Imposta il colore del testo a grigio */
+    position: absolute;
+    bottom: -60px;
+    font-size: 72px; /* Aumenta la dimensione del font */
+    color: rgba(255, 255, 255, 0.3); /* Colore del testo */
 }
+
+
 
 /* Scrollbar */
 body::-webkit-scrollbar, .overflow-auto::-webkit-scrollbar {
@@ -253,7 +279,7 @@ body::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb {
     padding-bottom: 60px; /* Aggiunge 60px di padding sotto */
     height: calc(100vh - 160px); /* Imposta l'altezza calcolando 100vh meno 160px */
     overflow-y: auto; /* Abilita lo scrolling verticale */
-    width: 90%; /* Imposta la larghezza al 90% del contenitore genitore */
+    width: 100%; /* Imposta la larghezza al 90% del contenitore genitore */
 }
 
 /* Input Group Container */
