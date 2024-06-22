@@ -133,7 +133,7 @@ def chat(contact):
     username = session['username']
     room = get_room_name(username, contact)
     messages = get_chat_messages(room)
-    return render_template('chat.html', username=username, contact=contact, messages=messages, room=room)
+    return jsonify({'messages': messages})
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
@@ -190,7 +190,14 @@ def get_room_name(username, contact):
 
 def get_chat_messages(room):
     chat_key = f"{room}_chat"
-    return r.lrange(chat_key, 0, -1)
+    messages = r.lrange(chat_key, 0, -1)
+    message_list = []
+    for msg in messages:
+        parts = msg.split(' > ', 2)
+        if len(parts) == 3:
+            timestamp, sender, message = parts
+            message_list.append({'timestamp': timestamp, 'sender': sender, 'text': message})
+    return message_list
 
 def search_users(query):
     keys = r.keys(f"*{query}*")

@@ -47,12 +47,6 @@
                 </div>
                 <div id="chat-messages" class="chat-messages p-3 overflow-auto flex-grow-1">
                     <!-- Messages will be loaded here -->
-                    {% for message in messages %}
-                        <div class="{{ 'sent-message' if message.sender == username else 'received-message' }}">
-                            {{ message.text }}
-                            <span class="message-timestamp">{{ message.timestamp }}</span>
-                        </div>
-                    {% endfor %}
                 </div>
             </div>
             <div class="input-group-container">
@@ -133,8 +127,6 @@
         $('.contact-item').on('click', function() {
             var contact = $(this).data('contact');
             $('#chat-contact-name').text(contact);
-            $('#chat-container').removeClass('d-none');
-            $('#no-chat-selected').addClass('d-none');
 
             // Join the room
             var room = getRoomName(username, contact);
