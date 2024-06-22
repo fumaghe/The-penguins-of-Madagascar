@@ -28,7 +28,7 @@ body {
     border-right: 1px solid #e6ecf3;
     position: fixed;
     height: 100%;
-    width: 320px; /* Allarga leggermente la sidebar */
+    width: 320px; /* Larghezza fissa della sidebar */
     overflow-y: auto;
 }
 
@@ -182,14 +182,14 @@ input:checked + .slider:before {
     border-radius: 15px;
     margin: 5px 0;
     padding: 10px 20px;
-    max-width: 75%; /* Box più corti */
+    max-width: 45%; /* Box più corti */
     word-wrap: break-word;
 }
 
 .sent-message {
     background-color: #0084ff; /* Blu chiaro */
     border: 1px solid #0084ff;
-    text-align: left;
+    text-align: right;
     align-self: flex-end;
     color: #ffffff;
 }
@@ -230,7 +230,7 @@ body::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb {
     top: 0;
     z-index: 1;
     width: calc(100% - 320px); /* Larghezza completa meno la larghezza della sidebar */
-    left: 320px; /* Allineamento con la sidebar */
+    margin-left: -15px; /* Sposta a destra per evitare spazio a sinistra */
 }
 
 .chat-head img {
@@ -246,25 +246,24 @@ body::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb {
 .chat-head .chat-contact-status {
     color: #999;
 }
-
+/* Chat Messages */
 .chat-messages {
     background-color: #191970; /* Blu notte */
     padding-bottom: 60px;
     height: calc(100vh - 160px); /* Altezza fissa per la sezione dei messaggi */
     overflow-y: auto; /* Abilita lo scrolling verticale */
     width: calc(100% - 320px); /* Larghezza completa meno la larghezza della sidebar */
-    margin-left: 320px; /* Allineamento con la sidebar */
 }
 
-/* Fissa la barra dei messaggi in basso */
+/* Input Group Container */
 .input-group-container {
     position: fixed;
     bottom: 0;
-    width: calc(100% - 320px); /* Compensare la larghezza della sidebar */
+    width: 100%; /* Compensare la larghezza della sidebar */
     background-color: white;
     padding: 10px;
     border-top: 1px solid #e6ecf3;
-    left: 320px; /* Assicurati che sia allineata correttamente con la sidebar */
+    margin-left: -15px; 
 }
 
 .input-group .form-control {

@@ -168,7 +168,7 @@ body {
 
 /* ------ RIGHT SIDE ------ */
 .right {
-    min-width: calc(100% - 400px);
+    min-width: calc(100% - 320px);
 }
 
 .chat-head {
