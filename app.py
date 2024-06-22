@@ -150,7 +150,7 @@ def on_join(data):
     username = data['username']
     room = data['room']
     join_room(room)
-    send({'message': f'{username} has entered the room.', 'username': 'system'}, to=room)
+    send({'message': f'{username} has entered the room.', 'username': 'system', 'timestamp': datetime.datetime.now().strftime("%H:%M")}, to=room)
 
 @socketio.on('message')
 def on_message(data):
@@ -164,7 +164,7 @@ def on_message(data):
     if contact_data.get("dnd") == "true":
         emit('error', {'msg': 'L\'utente è in modalità Do Not Disturb.'}, to=request.sid)
     else:
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        timestamp = datetime.datetime.now().strftime("%H:%M")
         formatted_message = f"{timestamp} > {username}: {message}"
         r.rpush(chat_key, formatted_message)
         send({'message': message, 'username': username, 'timestamp': timestamp}, to=room)
