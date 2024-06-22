@@ -257,29 +257,29 @@ body::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb {
 
 /* Input Group Container */
 .input-group-container {
-    position: fixed;
-    bottom: 0;
-    width: 100%; /* Compensare la larghezza della sidebar */
-    background-color: white;
-    padding: 10px;
-    border-top: 1px solid #e6ecf3;
-    margin-left: -15px; 
+    position: fixed; /* Posiziona il contenitore in modo fisso, relativo alla finestra del browser */
+    bottom: 0; /* Allinea il contenitore al fondo della finestra */
+    width: 78%; /* Imposta la larghezza del contenitore al 100% della finestra */
+    background-color: #191970; /* Imposta il colore di sfondo a bianco */
+    padding: 20px 110px; /* Aggiunge uno spazio interno di 10px su tutti i lati */
+    border-top: 1px solid #191970; /* Aggiunge un bordo superiore di 1px con colore grigio chiaro */
+    margin-left: -15px; /* Sposta il contenitore 15px a sinistra */
 }
 
 .input-group .form-control {
-    border: 1px solid #e6ecf3;
-    border-radius: 20px;
-    padding: 10px 15px;
-    box-shadow: none;
+    border: 1px solid #e6ecf3; /* Imposta un bordo di 1px con colore grigio chiaro */
+    border-radius: 20px; /* Arrotonda gli angoli del bordo con un raggio di 20px */
+    padding: 10px 15px; /* Aggiunge uno spazio interno di 10px sopra/sotto e 15px a destra/sinistra */
+    box-shadow: none; /* Rimuove qualsiasi ombreggiatura dal bordo */
 }
 
 .input-group .btn-primary {
-    background-color: #4a90e2;
-    border-color: #4a90e2;
-    border-radius: 20px;
+    background-color: #4a90e2; /* Imposta il colore di sfondo del pulsante a blu */
+    border-color: #4a90e2; /* Imposta il colore del bordo del pulsante a blu */
+    border-radius: 20px; /* Arrotonda gli angoli del bordo con un raggio di 20px */
 }
 
 .input-group .btn-primary:hover {
-    background-color: #357ab7;
-    border-color: #357ab7;
+    background-color: #357ab7; /* Imposta il colore di sfondo del pulsante a blu scuro quando l'utente passa sopra */
+    border-color: #357ab7; /* Imposta il colore del bordo del pulsante a blu scuro quando l'utente passa sopra */
 }
