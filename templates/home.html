@@ -140,6 +140,52 @@
     </div>
 </div>
 
+<!-- Add Contact Modal -->
+<div class="modal fade" id="addContactModal" tabindex="-1" role="dialog" aria-labelledby="addContactModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addContactModalLabel">Add Contact</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="add-contact-form" method="post" action="/add_contact">
+                    <div class="form-group">
+                        <label for="new_contact">Enter the username of the contact to add:</label>
+                        <input type="text" class="form-control" id="new_contact" name="new_contact" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Remove Contact Modal -->
+<div class="modal fade" id="removeContactModal" tabindex="-1" role="dialog" aria-labelledby="removeContactModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="removeContactModalLabel">Remove Contact</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="remove-contact-form" method="post" action="/remove_contact">
+                    <div class="form-group">
+                        <label for="contact_to_remove">Enter the username of the contact to remove:</label>
+                        <input type="text" class="form-control" id="contact_to_remove" name="contact_to_remove" required>
+                    </div>
+                    <button type="submit" class="btn btn-danger">Remove</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -226,26 +272,12 @@
 
         // Handle Add Contact
         $('#add-btn').on('click', function() {
-            var newContact = prompt("Enter the username of the contact to add:");
-            if (newContact) {
-                $.post('/add_contact', { new_contact: newContact }, function(data) {
-                    if (data.status === "success") {
-                        location.reload();
-                    } else {
-                        alert(data.message);
-                    }
-                });
-            }
+            $('#addContactModal').modal('show');
         });
 
         // Handle Remove Contact
         $('#remove-btn').on('click', function() {
-            var contactToRemove = prompt("Enter the username of the contact to remove:");
-            if (contactToRemove) {
-                $.post('/remove_contact', { contact_to_remove: contactToRemove }, function() {
-                    location.reload();
-                });
-            }
+            $('#removeContactModal').modal('show');
         });
 
         // Handle DND

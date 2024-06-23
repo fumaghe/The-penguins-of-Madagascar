@@ -1,15 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Rimuovi Contatto</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+<div class="container">
     <h1>Rimuovi Contatto</h1>
     <form method="post" action="/remove_contact">
-        <label for="contact_to_remove">Nome Utente:</label>
-        <input type="text" id="contact_to_remove" name="contact_to_remove" required><br>
-        <button type="submit">Rimuovi</button>
+        <div class="form-group">
+            <label for="contact_to_remove">Nome Utente:</label>
+            <input type="text" class="form-control" id="contact_to_remove" name="contact_to_remove" required>
+        </div>
+        <button type="submit" class="btn btn-danger">Rimuovi</button>
     </form>
-    <p><a href="{{ url_for('home') }}">Torna alla Home</a></p>
+    <p class="mt-3"><a href="{{ url_for('home') }}">Torna alla Home</a></p>
+</div>
 </body>
 </html>

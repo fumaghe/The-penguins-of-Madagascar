@@ -177,6 +177,35 @@ input:checked + .slider:before {
     transform: translateX(10px); /* Modifica la traduzione del cursore */
 }
 
+/* Chat Column */
+.chat-column {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    height: 100vh;
+    padding: 20px;
+}
+
+.chat-head {
+    grid-row: 1;
+    padding: 10px;
+    background-color: #000;
+    color: #00FF00;
+    border-bottom: 1px solid #fff;
+}
+
+.chat-messages {
+    grid-row: 2;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #000;
+}
+
+.input-group-container {
+    grid-row: 3;
+    padding: 10px;
+    background-color: #000;
+}
+
 /* Chat Area */
 .p-3 {
     padding: 1rem !important; /* Aggiunge 1 rem di padding su tutti i lati */
@@ -368,7 +397,6 @@ input:checked + .slider:before {
     border-color: #00cc00; /* Verde più scuro */
 }
 
-
 /* Stili per le pagine di login e register */
 body {
     background: linear-gradient(to bottom right, #2c2b2b, #2c2b2b); /* Gradient blu notte e nero */
@@ -457,4 +485,33 @@ a {
 a:hover {
     color: #00cc00; /* Verde più scuro */
     text-decoration: underline;
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #000; /* Sfondo nero */
+    color: #00FF00; /* Testo verde fluo */
+    border: 1px solid #00FF00; /* Bordo verde fluo */
+}
+
+.modal-header {
+    border-bottom: 1px solid #00FF00; /* Bordo inferiore verde fluo */
+}
+
+.modal-header .close {
+    color: #00FF00; /* Colore verde fluo */
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.form-group label {
+    color: #00FF00; /* Testo verde fluo */
+}
+
+.form-control {
+    background-color: #000; /* Sfondo nero */
+    color: #00FF00; /* Testo verde fluo */
+    border: 1px solid #00FF00; /* Bordo verde fluo */
 }
