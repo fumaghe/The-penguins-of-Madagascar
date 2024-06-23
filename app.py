@@ -4,6 +4,8 @@ import redis
 import hashlib
 import datetime
 import threading
+import os
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
@@ -25,6 +27,10 @@ except redis.ConnectionError as e:
 # Funzione per hashing della password
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
+
+# Percorso della cartella di upload
+UPLOAD_FOLDER = r'C:\Users\AndreaFumagalli\OneDrive - ITS Angelo Rizzoli\Documenti\GitHub\The-penguins-of-Madagascar\static'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -55,7 +61,14 @@ def register():
         elif r.exists(username):
             error = "Nome utente già esistente. Scegli un nome diverso."
         else:
-            avatar_path = 'static/foto profilo.png'  # Percorso dell'immagine avatar di default
+            avatar = request.files.get('avatar')
+            if avatar and avatar.filename != '':
+                filename = secure_filename(f"{username}.png")
+                avatar_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                avatar.save(avatar_path)
+            else:
+                avatar_path = os.path.join(app.config['UPLOAD_FOLDER'], 'foto profilo.png')
+            
             user_data = {
                 "username": username,
                 "password": hash_password(password),
@@ -167,7 +180,6 @@ def search():
     results = search_users(search_query)
     return jsonify({"results": results})
 
-
 @socketio.on('join')
 def on_join(data):
     username = data['username']
@@ -225,7 +237,8 @@ def get_contacts(username):
     contact_list = []
     for contact in contacts:
         last_message = get_last_message(username, contact)
-        contact_list.append({'name': contact, 'last_message': last_message})
+        avatar = r.hget(contact, 'avatar')
+        contact_list.append({'name': contact, 'last_message': last_message, 'avatar': avatar})
     return contact_list
 
 def add_contact_to_book(username, new_contact):
