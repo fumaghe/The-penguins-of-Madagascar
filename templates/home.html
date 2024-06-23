@@ -30,8 +30,12 @@
             </div>
             <ul class="list-group" id="contact-list">
                 {% for contact in contacts %}
-                <li class="list-group-item contact-item" data-contact="{{ contact }}">
-                    {{ contact }}
+                <li class="list-group-item contact-item" data-contact="{{ contact.name }}">
+                    <img src="{{ url_for('static', filename='avatar.png') }}" alt="Avatar" class="rounded-circle">
+                    <div class="contact-info">
+                        <span class="contact-name">{{ contact.name }}</span>
+                        <span class="last-message">{{ contact.last_message }}</span>
+                    </div>
                 </li>
                 {% endfor %}
             </ul>
@@ -210,6 +214,14 @@
                     startTimer(data.timestamp);
                 }
             }
+        });
+
+        // New code for updating the last message in the contact list
+        socket.on('update_last_message', function(data) {
+            var contact = data.contact;
+            var lastMessage = data.last_message;
+            var contactItem = $('.contact-item[data-contact="' + contact + '"] .last-message');
+            contactItem.text(lastMessage);
         });
 
         // Handle Add Contact

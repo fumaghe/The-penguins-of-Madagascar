@@ -62,11 +62,34 @@ body {
 }
 
 .sidebar .contact-item img {
-    width: 50px; /* Aumenta ulteriormente la dimensione dell'immagine dei contatti */
+    width: 50px; /* Dimensione dell'immagine dei contatti */
     height: 50px;
     border-radius: 50%;
     object-fit: cover; /* Assicura che l'immagine si adatti correttamente */
     margin-right: 10px; /* Aggiunge uno spazio tra l'immagine e il testo */
+}
+
+.sidebar .contact-item {
+    display: flex;
+    align-items: center;
+}
+
+.sidebar .contact-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.contact-item .contact-name {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #00FF00; /* Verde fluo */
+}
+
+.contact-item .last-message {
+    font-size: 0.9rem; /* Dimensione più piccola per l'ultimo messaggio */
+    color: #fff; /* Colore bianco */
+    margin-top: 2px;
 }
 
 .sidebar button {

@@ -75,8 +75,8 @@ def home():
     contacts = get_contacts(username)
     dnd = r.hget(username, 'dnd')
     avatar = r.hget(username, 'avatar')
-    auto_delete = r.hget(username, 'auto_delete')  # Aggiungi questo
-    return render_template('home.html', username=username, contacts=contacts, dnd=dnd, avatar=avatar, auto_delete=auto_delete)  # Passa auto_delete al template
+    auto_delete = r.hget(username, 'auto_delete')
+    return render_template('home.html', username=username, contacts=contacts, dnd=dnd, avatar=avatar, auto_delete=auto_delete)
 
 @app.route('/logout')
 def logout():
@@ -184,7 +184,9 @@ def on_message(data):
         r.rpush(chat_key, formatted_message)
         send({'message': message, 'username': username, 'timestamp': timestamp, 'auto_delete': auto_delete}, to=room)
 
-        # Check if auto delete is enabled for the user
+        # Emit to update the last message in the sidebar
+        emit('update_last_message', {'contact': contact, 'last_message': message}, broadcast=True)
+
         if auto_delete:
             timer = threading.Timer(60.0, delete_message, args=[chat_key, formatted_message, room])
             timer.start()
@@ -194,12 +196,28 @@ def delete_message(chat_key, message, room):
     # Notify clients to remove the message
     send({'message': message, 'delete': True}, to=room)
 
+def get_last_message(username, contact):
+    room = get_room_name(username, contact)
+    chat_key = f"{room}_chat"
+    last_message = r.lrange(chat_key, -1, -1)
+    if last_message:
+        parts = last_message[0].split(' > ', 1)
+        if len(parts) == 2:
+            timestamp, text = parts
+            sender, message = text.split(': ', 1)
+            return message
+    return "..."
+
 def get_contacts(username):
     contacts_key = f"{username}_contacts"
     if not r.exists(contacts_key):
         r.rpush(contacts_key, username)
     contacts = r.lrange(contacts_key, 0, -1)
-    return contacts
+    contact_list = []
+    for contact in contacts:
+        last_message = get_last_message(username, contact)
+        contact_list.append({'name': contact, 'last_message': last_message})
+    return contact_list
 
 def add_contact_to_book(username, new_contact):
     contacts_key = f"{username}_contacts"

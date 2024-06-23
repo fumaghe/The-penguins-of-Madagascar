@@ -383,3 +383,21 @@ body::-webkit-scrollbar, .contact-list::-webkit-scrollbar, .chat::-webkit-scroll
 body::-webkit-scrollbar-thumb, .contact-list::-webkit-scrollbar-thumb, .chat::-webkit-scrollbar-thumb, .information::-webkit-scrollbar-thumb {
     background-color: rgba(0,0,0,0.2);
 }
+
+.contact-item .contact-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.contact-item .contact-name {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #00FF00; /* Verde fluo */
+}
+
+.contact-item .last-message {
+    font-size: 0.9rem; /* Dimensione più piccola per l'ultimo messaggio */
+    color: #fff; /* Colore bianco */
+    margin-top: 2px;
+}
