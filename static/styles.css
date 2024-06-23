@@ -247,7 +247,7 @@ input:checked + .slider:before {
     display: block;
     font-size: 15px; /* Dimensione del font */
     text-align: right;
-    color: rgba(0, 0, 0, 0.817); /* Colore del testo */
+    color: rgba(236, 234, 234, 0.817); /* Colore del testo */
     position: absolute;
     bottom: -20px; /* Posiziona il timestamp sotto il messaggio */
     right: 20px; /* Allinea il timestamp a destra */
@@ -259,7 +259,7 @@ body::-webkit-scrollbar, .overflow-auto::-webkit-scrollbar {
 }
 
 body::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb {
-    background-color: rgba(0,0,0,0.2); /* Imposta il colore della thumb della scrollbar */
+    background-color: rgba(215, 195, 195, 0.381); /* Imposta il colore della thumb della scrollbar */
     border-radius: 10px; /* Arrotonda gli angoli della thumb */
 }
 

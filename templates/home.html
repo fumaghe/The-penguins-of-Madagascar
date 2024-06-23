@@ -42,6 +42,12 @@
                 <span class="slider"></span>
             </label>
             <hr>
+            <h5>Auto Delete Messages</h5>
+            <label class="switch">
+                <input type="checkbox" id="auto-delete-checkbox" {{ 'checked' if auto_delete == 'true' else '' }}>
+                <span class="slider"></span>
+            </label>
+            <hr>
             <button id="profile-btn" class="btn btn-secondary">Profile</button>
             <button id="search-btn" class="btn btn-secondary">Search Users</button>
         </div>
@@ -178,9 +184,16 @@
                 alert(data.error);
                 return;
             }
-            var msgClass = data.username === username ? 'sent-message' : 'received-message';
-            $('#chat-messages').append('<div class="' + msgClass + '">' + data.message + '<span class="message-timestamp">' + data.timestamp + '</span></div>');
-            $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+            if (data.delete) {
+                // Find and remove the message from the DOM
+                $('#chat-messages div').filter(function() {
+                    return $(this).text().includes(data.message);
+                }).remove();
+            } else {
+                var msgClass = data.username === username ? 'sent-message' : 'received-message';
+                $('#chat-messages').append('<div class="' + msgClass + '">' + data.message + '<span class="message-timestamp">' + data.timestamp + '</span></div>');
+                $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+            }
         });
 
         // Handle Add Contact
@@ -221,6 +234,11 @@
         // Handle Search
         $('#search-btn').on('click', function() {
             $('#search-modal').modal('show');
+        });
+
+        // Handle Auto Delete
+        $('#auto-delete-checkbox').on('change', function() {
+            $.post('/toggle_auto_delete');
         });
 
         function getRoomName(user1, user2) {

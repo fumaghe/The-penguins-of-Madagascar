@@ -3,6 +3,7 @@ import hashlib
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_socketio import SocketIO, join_room, send, emit
 import datetime
+import threading
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
@@ -24,6 +25,16 @@ except redis.ConnectionError as e:
 # Funzione per hashing della password
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
+
+@app.route('/toggle_auto_delete', methods=['POST'])
+def toggle_auto_delete():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    username = session['username']
+    user_data = r.hgetall(username)
+    new_auto_delete_status = "true" if user_data.get("auto_delete", "false") == "false" else "false"
+    r.hset(username, "auto_delete", new_auto_delete_status)
+    return redirect(url_for('home'))
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -69,7 +80,8 @@ def home():
     contacts = get_contacts(username)
     dnd = r.hget(username, 'dnd')
     avatar = r.hget(username, 'avatar')
-    return render_template('home.html', username=username, contacts=contacts, dnd=dnd, avatar=avatar)
+    auto_delete = r.hget(username, 'auto_delete')  # Aggiungi questo
+    return render_template('home.html', username=username, contacts=contacts, dnd=dnd, avatar=avatar, auto_delete=auto_delete)  # Passa auto_delete al template
 
 @app.route('/logout')
 def logout():
@@ -171,11 +183,22 @@ def on_message(data):
     if contact_data.get("dnd") == "true":
         emit('error', {'msg': 'L\'utente è in modalità Do Not Disturb.'}, to=request.sid)
     else:
-        timestamp = datetime.datetime.now().strftime("%H:%M")  # Modifica qui per mostrare solo ora e minuto
+        timestamp = datetime.datetime.now().strftime("%H:%M")
         formatted_message = f"{timestamp} > {username}: {message}"
         r.rpush(chat_key, formatted_message)
         send({'message': message, 'username': username, 'timestamp': timestamp}, to=room)
 
+        # Check if auto delete is enabled for the user
+        user_data = r.hgetall(username)
+        if user_data.get("auto_delete", "false") == "true":
+            timer = threading.Timer(60.0, delete_message, args=[chat_key, formatted_message])
+            timer.start()
+
+def delete_message(chat_key, message):
+    r.lrem(chat_key, 0, message)
+    # Notify clients to remove the message
+    room = chat_key.replace("_chat", "")
+    send({'message': message, 'delete': True}, to=room)
 
 def get_contacts(username):
     contacts_key = f"{username}_contacts"
@@ -201,9 +224,10 @@ def get_chat_messages(room):
     messages = r.lrange(chat_key, 0, -1)
     message_list = []
     for msg in messages:
-        parts = msg.split(' > ', 2)
-        if len(parts) == 3:
-            timestamp, sender, message = parts
+        parts = msg.split(' > ', 1)
+        if len(parts) == 2:
+            timestamp, text = parts
+            sender, message = text.split(': ', 1)
             message_list.append({'timestamp': timestamp, 'sender': sender, 'text': message})
     return message_list
 
