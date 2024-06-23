@@ -68,13 +68,13 @@ def register():
                 avatar_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 avatar.save(avatar_path)
             else:
-                avatar_path = os.path.join(app.config['UPLOAD_FOLDER'], DEFAULT_AVATAR)
-            
+                filename = DEFAULT_AVATAR
+
             user_data = {
                 "username": username,
                 "password": hash_password(password),
                 "dnd": "false",
-                "avatar": avatar_path  # Aggiungi il percorso dell'avatar ai dati utente
+                "avatar": filename  # Salva solo il nome del file
             }
             r.hset(username, mapping=user_data)
             session['username'] = username
@@ -142,24 +142,33 @@ def toggle_auto_delete():
 def update_profile():
     if 'username' not in session:
         return redirect(url_for('login'))
-    username = session['username']
-    new_username = request.form['new_username']
-    new_password = request.form['new_password']
-    avatar = request.files['avatar']
+    
+    current_username = session['username']
+    new_username = request.form.get('new_username', current_username)
+    new_password = request.form.get('new_password')
+    avatar = request.files.get('avatar')
 
-    user_data = r.hgetall(username)
+    user_data = r.hgetall(current_username)
+
     if new_username:
         user_data['username'] = new_username
+    
     if new_password:
         user_data['password'] = hash_password(new_password)
-    if avatar:
-        avatar_path = f'static/avatars/{username}.png'
+    
+    if avatar and avatar.filename != '':
+        filename = secure_filename(f"{new_username}.png")
+        avatar_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         avatar.save(avatar_path)
-        user_data['avatar'] = avatar_path
+        user_data['avatar'] = filename
+    else:
+        user_data['avatar'] = user_data.get('avatar', DEFAULT_AVATAR)
 
+    # Aggiorna i dati dell'utente in Redis
     r.hset(new_username, mapping=user_data)
-    if new_username != username:
-        r.delete(username)
+    
+    if new_username != current_username:
+        r.delete(current_username)
         session['username'] = new_username
 
     return redirect(url_for('home'))
