@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from flask_socketio import SocketIO, join_room, send, emit
 import redis
 import hashlib
@@ -28,6 +28,7 @@ def hash_password(password):
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
+    error = None
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -37,18 +38,22 @@ def login():
                 session['username'] = username
                 return redirect(url_for('home'))
             else:
-                return "Password errata. Riprova."
+                error = "Password errata. Riprova."
         else:
-            return "Nome utente non trovato. Riprova."
-    return render_template('login.html')
+            error = "Nome utente non trovato. Riprova."
+    return render_template('login.html', error=error)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    error = None
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        if r.exists(username):
-            return "Nome utente già esistente. Scegli un nome diverso."
+        confirm_password = request.form['confirm_password']
+        if password != confirm_password:
+            error = "Le password non corrispondono. Riprova."
+        elif r.exists(username):
+            error = "Nome utente già esistente. Scegli un nome diverso."
         else:
             avatar_path = 'static/foto profilo.png'  # Percorso dell'immagine avatar di default
             user_data = {
@@ -60,7 +65,7 @@ def register():
             r.hset(username, mapping=user_data)
             session['username'] = username
             return redirect(url_for('home'))
-    return render_template('register.html')
+    return render_template('register.html', error=error)
 
 @app.route('/home')
 def home():

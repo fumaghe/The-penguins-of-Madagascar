@@ -49,6 +49,8 @@ body {
 .sidebar h5 {
     font-weight: 600;
     color: #00FF00; /* Verde fluo */
+    display: flex;
+    align-items: center; /* Allinea verticalmente il testo e il toggle switch */
 }
 
 .sidebar .btn-group {
@@ -60,19 +62,21 @@ body {
 }
 
 .sidebar .contact-item img {
-    width: 30px; /* Adatta la dimensione dell'immagine dei contatti */
-    height: 30px;
+    width: 50px; /* Aumenta ulteriormente la dimensione dell'immagine dei contatti */
+    height: 50px;
     border-radius: 50%;
     object-fit: cover; /* Assicura che l'immagine si adatti correttamente */
     margin-right: 10px; /* Aggiunge uno spazio tra l'immagine e il testo */
 }
 
 .sidebar button {
-    width: 48%;
+    width: 45%; /* Riduce la larghezza dei pulsanti */
     margin-bottom: 10px;
     background-color: #00FF00; /* Verde fluo */
     border: 1px solid #fff; /* Bordo bianco */
     color: #000; /* Nero */
+    font-size: 0.8rem; /* Riduce la dimensione del testo dei pulsanti */
+    padding: 5px; /* Riduce il padding dei pulsanti */
 }
 
 .sidebar button:hover {
@@ -82,13 +86,14 @@ body {
 .sidebar .list-group-item {
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: 20px; /* Aumenta ulteriormente il padding per i contatti */
     border: none;
     border-bottom: 1px solid #fff; /* Linea divisoria bianca */
     cursor: pointer;
     background-color: #000; /* Nero */
     color: #00FF00; /* Verde fluo */
     font-weight: bold;
+    font-size: 1.5rem; /* Aumenta ulteriormente la dimensione del testo dei contatti */
 }
 
 .sidebar .list-group-item:hover {
@@ -99,15 +104,16 @@ body {
     margin-right: 15px;
 }
 
-#dnd-checkbox {
+#dnd-checkbox, #auto-delete-checkbox {
     display: none;
 }
 
 .switch {
     position: relative;
     display: inline-block;
-    width: 34px;
-    height: 20px;
+    width: 30px; /* Riduce ulteriormente la larghezza della switch */
+    height: 20px; /* Riduce ulteriormente l'altezza della switch */
+    margin-left: 10px; /* Aggiunge un margine a sinistra per distanziare dal testo */
 }
 
 .switch input {
@@ -125,16 +131,16 @@ body {
     bottom: 0;
     background-color: #ccc;
     transition: .4s;
-    border-radius: 34px;
+    border-radius: 20px;
 }
 
 .slider:before {
     position: absolute;
     content: "";
-    height: 14px;
-    width: 14px;
-    left: 3px;
-    bottom: 3px;
+    height: 18px; /* Riduce ulteriormente l'altezza del cursore */
+    width: 18px; /* Riduce ulteriormente la larghezza del cursore */
+    left: 1px;
+    bottom: 1px;
     background-color: white;
     transition: .4s;
     border-radius: 50%;
@@ -145,7 +151,7 @@ input:checked + .slider {
 }
 
 input:checked + .slider:before {
-    transform: translateX(14px);
+    transform: translateX(10px); /* Modifica la traduzione del cursore */
 }
 
 /* Chat Area */
@@ -243,12 +249,12 @@ input:checked + .slider:before {
 }
 
 /* Scrollbar */
-body::-webkit-scrollbar, .overflow-auto::-webkit-scrollbar {
-    width: 0.5em; /* Imposta la larghezza della scrollbar */
+.sidebar::-webkit-scrollbar {
+    width: 4px; /* Imposta la larghezza della scrollbar */
 }
 
-body::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb {
-    background-color: rgba(215, 195, 195, 0.381); /* Imposta il colore della thumb della scrollbar */
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2); /* Imposta il colore e la trasparenza della thumb della scrollbar */
     border-radius: 10px; /* Arrotonda gli angoli della thumb */
 }
 
@@ -297,21 +303,41 @@ body::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb {
     bottom: 0; /* Allinea il contenitore al fondo della finestra */
     width: 78%; /* Imposta la larghezza del contenitore al 100% della finestra */
     background-color: #000; /* Nero */
-    padding: 20px 110px; /* Aggiunge uno spazio interno di 10px su tutti i lati */ 
+    padding: 20px 110px; /* Aggiunge uno spazio interno di 20px su tutti i lati */
     margin-left: -15px; /* Sposta il contenitore 15px a sinistra */
 }
 
+.input-group {
+    display: flex; /* Imposta il display del contenitore come flexbox */
+    width: 100%; /* Imposta la larghezza al 100% del contenitore genitore */
+}
+
 .input-group .form-control {
-    border: 1px solid #fff; /* Imposta un bordo di 1px con colore grigio chiaro */
+    border: 1px solid #fff; /* Imposta un bordo di 1px con colore bianco */
     border-radius: 20px; /* Arrotonda gli angoli del bordo con un raggio di 20px */
     padding: 10px 15px; /* Aggiunge uno spazio interno di 10px sopra/sotto e 15px a destra/sinistra */
     box-shadow: none; /* Rimuove qualsiasi ombreggiatura dal bordo */
+    background-color: #000; /* Sfondo nero */
+    color: #00FF00; /* Testo verde fluo */
+    height: 40px; /* Altezza della barra di inserimento */
+}
+
+.input-group .form-control::placeholder {
+    color: #777; /* Colore del placeholder */
 }
 
 .input-group .btn-primary {
     background-color: #00FF00; /* Verde fluo */
     border-color: #00FF00; /* Verde fluo */
     border-radius: 20px; /* Arrotonda gli angoli del bordo con un raggio di 20px */
+    margin-left: 10px; /* Aggiunge un margine a sinistra del pulsante */
+    padding: 0 20px; /* Aggiunge padding interno */
+    font-weight: bold; /* Grassetto per il testo del pulsante */
+    color: #000; /* Testo nero */
+    height: 40px; /* Altezza uguale alla barra di inserimento */
+    display: flex; /* Usa Flexbox per centrare il testo verticalmente */
+    align-items: center; /* Allinea gli elementi al centro verticalmente */
+    justify-content: center; /* Centra il testo orizzontalmente */
 }
 
 .input-group .btn-primary:hover {
@@ -319,22 +345,93 @@ body::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb {
     border-color: #00cc00; /* Verde più scuro */
 }
 
-/* Grid Layout */
-.chat-container {
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    height: 100vh; /* Adatta l'altezza del contenitore al 100% della viewport */
+
+/* Stili per le pagine di login e register */
+body {
+    background: linear-gradient(to bottom right, #2c2b2b, #2c2b2b); /* Gradient blu notte e nero */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
 }
 
-.chat-head {
-    grid-row: 1;
+.container {
+    background-color: #000; /* Sfondo nero */
+    color: #00FF00; /* Testo verde fluo */
+    padding: 30px 40px;
+    border-radius: 10px; /* Angoli arrotondati */
+    width: 400px; /* Larghezza fissa */
+    box-shadow: 0px 0px 20px 0px rgba(0, 255, 0, 0.5); /* Ombra verde */
+    text-align: center;
 }
 
-.chat-messages {
-    grid-row: 2;
-    overflow-y: auto;
+h1 {
+    font-size: 2.5rem; /* Dimensione del font */
+    margin-bottom: 20px;
+    font-weight: bold;
+    border-bottom: 2px solid #00FF00; /* Linea divisoria verde */
+    padding-bottom: 10px;
 }
 
-.input-group-container {
-    grid-row: 3;
+.form-group {
+    margin-bottom: 15px;
+    text-align: left; /* Allineamento a sinistra */
+}
+
+.form-group label {
+    color: #00FF00; /* Testo verde fluo */
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.form-control {
+    background-color: #000; /* Sfondo nero */
+    color: white;
+    border: 1px solid #00FF00; /* Bordo verde fluo */
+    padding: 10px; /* Aggiunge padding */
+    border-radius: 5px; /* Angoli arrotondati */
+    width: 100%; /* Larghezza al 100% del contenitore */
+}
+
+.form-control:focus {
+    background-color: #000000; /* Blu notte più scuro */
+    color: #00FF00;
+    border-color: #00cc00; /* Verde più scuro */
+    box-shadow: none;
+}
+
+.btn-primary {
+    background-color: #00FF00; /* Verde fluo */
+    border: none;
+    color: #000;
+    font-weight: bold;
+    width: 100%;
+    padding: 15px; /* Aumenta il padding */
+    border-radius: 5px;
+    transition: background-color 0.3s ease; /* Aggiunge una transizione */
+}
+
+.btn-primary:hover {
+    background-color: #00cc00; /* Verde più scuro */
+}
+
+.alert-danger {
+    background-color: #ff4d4d; /* Rosso */
+    color: white;
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+a {
+    color: #00FF00; /* Verde fluo */
+    text-decoration: none;
+}
+
+a:hover {
+    color: #00cc00; /* Verde più scuro */
+    text-decoration: underline;
 }
