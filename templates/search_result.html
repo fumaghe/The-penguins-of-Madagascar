@@ -1,20 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Risultati Ricerca</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
-<div class="container">
-    <h1>Risultati Ricerca</h1>
-    <ul>
-        {% for result in results %}
-        <li>{{ result }}</li>
-        {% endfor %}
-    </ul>
-    <p><a href="{{ url_for('search') }}">Nuova Ricerca</a></p>
-    <p><a href="{{ url_for('home') }}">Torna alla Home</a></p>
-</div>
-</body>
-</html>
+<ul class="list-group">
+    {% for result in results %}
+    <li class="list-group-item search-result-item" data-username="{{ result.name }}">
+        {{ result.name }}
+    </li>
+    {% endfor %}
+</ul>

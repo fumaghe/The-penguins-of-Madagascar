@@ -135,6 +135,9 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Cerca</button>
                 </form>
+                <div id="search-results" class="mt-3">
+                    <!-- Risultati della ricerca saranno inseriti qui -->
+                </div>
             </div>
         </div>
     </div>
@@ -151,7 +154,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="add-contact-form" method="post" action="/add_contact">
+                <form id="add-contact-form">
                     <div class="form-group">
                         <label for="new_contact">Enter the username of the contact to add:</label>
                         <input type="text" class="form-control" id="new_contact" name="new_contact" required>
@@ -174,7 +177,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="remove-contact-form" method="post" action="/remove_contact">
+                <form id="remove-contact-form">
                     <div class="form-group">
                         <label for="contact_to_remove">Enter the username of the contact to remove:</label>
                         <input type="text" class="form-control" id="contact_to_remove" name="contact_to_remove" required>
@@ -299,6 +302,93 @@
         // Handle Auto Delete
         $('#auto-delete-checkbox').on('change', function() {
             $.post('/toggle_auto_delete');
+        });
+
+        // Handle Search Form
+        $('#search-form').on('submit', function(event) {
+            event.preventDefault();
+            $.post('/search', $(this).serialize(), function(data) {
+                var results = data.results.map(function(result) {
+                    return `
+                        <li class="list-group-item search-result-item">
+                            ${result}
+                            <button class="btn btn-primary btn-sm add-contact-btn" data-username="${result}">Add</button>
+                        </li>`;
+                }).join('');
+                $('#search-results').html(`<ul class="list-group">${results}</ul>`);
+            });
+        });
+
+        // Handle Add Contact from Search Results
+        $(document).on('click', '.add-contact-btn', function() {
+            var username = $(this).data('username');
+            $.post('/add_contact', { new_contact: username }, function(response) {
+                if (response.status === 'success') {
+                    // Update contact list
+                    var newContactHtml = `
+                        <li class="list-group-item contact-item" data-contact="${username}">
+                            <img src="{{ url_for('static', filename='avatar.png') }}" alt="Avatar" class="rounded-circle">
+                            <div class="contact-info">
+                                <span class="contact-name">${username}</span>
+                                <span class="last-message">...</span>
+                            </div>
+                        </li>
+                    `;
+                    $('#contact-list').append(newContactHtml);
+                    
+                    // Rebind click event for new contact item
+                    $('.contact-item').off('click').on('click', function() {
+                        var contact = $(this).data('contact');
+                        $('#chat-contact-name').text(contact);
+
+                        // Join the room
+                        var room = getRoomName(username, contact);
+                        socket.emit('join', { username: username, room: room });
+
+                        // Load chat messages for the selected contact
+                        $.get('/chat/' + contact, function(data) {
+                            $('#chat-messages').html(data.messages.map(function(message) {
+                                var msgClass = message.sender === username ? 'sent-message' : 'received-message';
+                                var messageHtml = `
+                                    <div class="${msgClass}">
+                                        ${message.text}
+                                        <span class="message-timestamp">${message.timestamp}</span>
+                                        ${message.auto_delete ? '<span class="delete-timer" data-timestamp="' + message.timestamp + '"></span>' : ''}
+                                    </div>`;
+                                return messageHtml;
+                            }).join(''));
+                            $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+                            startTimers();
+                        });
+                    });
+                } else {
+                    alert(response.message);
+                }
+            });
+        });
+
+        $('#add-contact-form').on('submit', function(event) {
+            event.preventDefault();
+            $.post('/add_contact', $(this).serialize(), function(response) {
+                if (response.status === 'success') {
+                    $('#addContactModal').modal('hide');
+                    window.location.reload();
+                } else {
+                    alert(response.message);
+                }
+            });
+        });
+
+        $('#remove-contact-form').on('submit', function(event) {
+            event.preventDefault();
+            $.post('/remove_contact', $(this).serialize(), function(response) {
+                if (response.status === 'success') {
+                    $('#removeContactModal').modal('hide');
+                    window.location.reload();
+                } else {
+                    alert(response.message);
+                }
+            });
         });
 
         function getRoomName(user1, user2) {

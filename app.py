@@ -86,19 +86,19 @@ def logout():
 @app.route('/add_contact', methods=['POST'])
 def add_contact():
     if 'username' not in session:
-        return redirect(url_for('login'))
+        return jsonify({"status": "error", "message": "Non sei autenticato"}), 401
     username = session['username']
     new_contact = request.form['new_contact']
     if r.exists(new_contact):
         add_contact_to_book(username, new_contact)
         return jsonify({"status": "success"})
     else:
-        return jsonify({"status": "error", "message": "Utente non trovato"})
+        return jsonify({"status": "error", "message": "Utente non trovato"}), 404
 
 @app.route('/remove_contact', methods=['POST'])
 def remove_contact():
     if 'username' not in session:
-        return redirect(url_for('login'))
+        return jsonify({"status": "error", "message": "Non sei autenticato"}), 401
     username = session['username']
     contact_to_remove = request.form['contact_to_remove']
     remove_contact_from_book(username, contact_to_remove)
@@ -158,6 +158,15 @@ def chat(contact):
     room = get_room_name(username, contact)
     messages = get_chat_messages(room)
     return jsonify({'messages': messages})
+
+@app.route('/search', methods=['POST'])
+def search():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    search_query = request.form['search_query']
+    results = search_users(search_query)
+    return jsonify({"results": results})
+
 
 @socketio.on('join')
 def on_join(data):
