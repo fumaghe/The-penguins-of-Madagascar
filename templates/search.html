@@ -22,7 +22,8 @@
         <ul class="list-group">
             {% for result in results %}
             <li class="list-group-item search-result-item" data-username="{{ result.name }}">
-                {{ result.name }}
+                <span class="username">{{ result.name }}</span>
+                <button class="btn btn-primary btn-sm add-contact-btn" data-username="{{ result.name }}">Add</button>
             </li>
             {% endfor %}
         </ul>
@@ -41,7 +42,7 @@
             });
         });
 
-        $(document).on('click', '.search-result-item', function() {
+        $(document).on('click', '.add-contact-btn', function() {
             var username = $(this).data('username');
             $.post('/add_contact', {new_contact: username}, function() {
                 window.location.href = '/home';

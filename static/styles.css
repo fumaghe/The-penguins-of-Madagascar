@@ -7,7 +7,7 @@
 }
 
 body {
-    background: #191970; /* Blu notte */
+    background: #000000; /* Blu notte */
     color: white; /* Scritte in bianco */
     overflow: hidden; /* Evita lo scrolling del body */
 }
@@ -236,7 +236,7 @@ input:checked + .slider:before {
     border-radius: 20px; /* Arrotonda gli angoli del bordo */
     margin: 10px 90px; /* Aggiunge margine sopra e sotto e 60px a destra e sinistra */
     padding: 12px 20px; /* Aggiunge padding interno */
-    max-width: 40%; /* Imposta la larghezza massima */
+    max-width: 35%; /* Imposta la larghezza massima */
     min-width: 30%;
     word-wrap: break-word; /* Fa andare a capo le parole lunghe */
     position: relative; /* Posizionamento relativo per gli pseudoelementi */
@@ -496,6 +496,11 @@ a:hover {
     text-decoration: underline;
 }
 
+/* Styling for sidebar buttons */
+.sidebar .btn {
+    font-weight: bold; /* Imposta il testo in grassetto */
+}
+
 /* Modal Content */
 .modal-content {
     background-color: #000; /* Sfondo nero */
@@ -523,4 +528,38 @@ a:hover {
     background-color: #000; /* Sfondo nero */
     color: #00FF00; /* Testo verde fluo */
     border: 1px solid #00FF00; /* Bordo verde fluo */
+}
+
+/* Styling for search results */
+.search-result-item {
+    background-color: #000; /* Sfondo nero */
+    color: #00FF00; /* Testo verde fluo */
+    border: 1px solid #00FF00; /* Bordo verde fluo */
+    padding: 10px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.search-result-item .username {
+    font-size: 1.2rem; /* Aumenta la dimensione del nome */
+    font-weight: bold;
+}
+
+.search-result-item .add-contact-btn {
+    background-color: #00FF00; /* Verde fluo */
+    color: #000; /* Testo nero */
+    font-size: 0.8rem; /* Riduce la dimensione del testo del pulsante */
+    padding: 5px 10px; /* Riduce il padding del pulsante */
+    border: 1px solid #fff; /* Bordo bianco */
+    width: 60px; /* Imposta la larghezza del pulsante */
+    height: 30px; /* Imposta l'altezza del pulsante */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-result-item .add-contact-btn:hover {
+    background-color: #00cc00; /* Verde più scuro */
 }
