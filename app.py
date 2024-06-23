@@ -68,7 +68,7 @@ def register():
                 avatar_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 avatar.save(avatar_path)
             else:
-                filename = DEFAULT_AVATAR
+                filename = 'foto profilo.png'  # Immagine predefinita
 
             user_data = {
                 "username": username,
@@ -160,9 +160,9 @@ def update_profile():
         filename = secure_filename(f"{new_username}.png")
         avatar_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         avatar.save(avatar_path)
-        user_data['avatar'] = filename
+        user_data['avatar'] = filename  # Salva il nuovo nome del file
     else:
-        user_data['avatar'] = user_data.get('avatar', DEFAULT_AVATAR)
+        user_data['avatar'] = user_data.get('avatar', 'foto profilo.png')
 
     # Aggiorna i dati dell'utente in Redis
     r.hset(new_username, mapping=user_data)
