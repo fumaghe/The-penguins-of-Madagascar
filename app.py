@@ -237,7 +237,7 @@ def get_contacts(username):
     contact_list = []
     for contact in contacts:
         last_message = get_last_message(username, contact)
-        avatar = r.hget(contact, 'avatar')
+        avatar = r.hget(contact, 'avatar') or 'static/default-avatar.png'
         contact_list.append({'name': contact, 'last_message': last_message, 'avatar': avatar})
     return contact_list
 
