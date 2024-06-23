@@ -7,8 +7,8 @@
 }
 
 body {
-    background: #000; /* Nero */
-    color: #00FF00; /* Verde fluo */
+    background: #191970; /* Blu notte */
+    color: white; /* Scritte in bianco */
     overflow: hidden; /* Evita lo scrolling del body */
 }
 
@@ -23,7 +23,7 @@ body {
 /* Sidebar */
 .sidebar {
     background-color: #000; /* Nero */
-    color: #00FF00; /* Verde fluo */
+    color: white;
     padding: 20px;
     border-right: 1px solid #fff; /* Linea divisoria bianca */
     position: fixed;
@@ -33,12 +33,11 @@ body {
 }
 
 .sidebar h1 {
-    font-size: 2rem;
+    font-size: 3rem;
     margin-bottom: 1rem;
     font-weight: bold;
     border-bottom: 1px solid #fff; /* Linea divisoria bianca */
     padding-bottom: 0.5rem;
-    color: #00FF00; /* Verde fluo */
 }
 
 .sidebar h3 {
@@ -93,7 +92,7 @@ body {
 }
 
 .sidebar .list-group-item:hover {
-    background-color: #333; /* Grigio scuro */
+    background-color: #0d250c;
 }
 
 .sidebar .rounded-circle {
@@ -163,11 +162,11 @@ input:checked + .slider:before {
 }
 
 .border-bottom {
-    border-bottom: 1px solid #fff !important; /* Aggiunge un bordo inferiore bianco */
+    border-bottom: 1px solid #fff !important; /* Aggiunge un bordo inferiore */
 }
 
 .border-top {
-    border-top: 1px solid #fff !important; /* Aggiunge un bordo superiore bianco */
+    border-top: 1px solid #fff !important; /* Aggiunge un bordo superiore */
 }
 
 .flex-grow-1 {
@@ -186,12 +185,12 @@ input:checked + .slider:before {
 .input-group-append {
     margin-left: 10px; /* Aggiunge 10px di margine a sinistra */
 }
-
 .sent-message, .received-message {
     border-radius: 20px; /* Arrotonda gli angoli del bordo */
-    margin: 10px 0; /* Aggiunge margine sopra e sotto */
+    margin: 10px 90px; /* Aggiunge margine sopra e sotto e 60px a destra e sinistra */
     padding: 12px 20px; /* Aggiunge padding interno */
-    max-width: 75%; /* Imposta la larghezza massima */
+    max-width: 40%; /* Imposta la larghezza massima */
+    min-width: 30%;
     word-wrap: break-word; /* Fa andare a capo le parole lunghe */
     position: relative; /* Posizionamento relativo per gli pseudoelementi */
     font-size: 18px; /* Dimensione del testo */
@@ -201,7 +200,7 @@ input:checked + .slider:before {
 }
 
 .sent-message {
-    background-color: #00FF00; /* Verde fluo */
+    background: #00ff0093; /* Verde fluo */
     border-radius: 20px 20px 0 20px; /* Arrotonda gli angoli */
     float: right; /* Allinea a destra */
     text-align: right; /* Testo allineato a destra */
@@ -215,15 +214,14 @@ input:checked + .slider:before {
     right: 0;
     border-right: none;
     border-left: 9px solid transparent;
-    border-top: 7.5px solid #00FF00; /* Verde fluo */
+    border-top: 7.5px solid #00ff0093; /* Verde fluo */
 }
 
 .received-message {
-    background-color: #fff; /* Bianco */
+    background: #ffffff98; /* Bianco */
     border-radius: 20px 20px 20px 0; /* Arrotonda gli angoli */
-    margin: 10px 0; /* Margine sopra e sotto */
     padding: 12px 20px; /* Padding interno */
-    max-width: 75%; /* Larghezza massima */
+    max-width: 35%; /* Larghezza massima */
     word-wrap: break-word; /* Fa andare a capo le parole lunghe */
     position: relative; /* Posizionamento relativo per gli pseudoelementi */
     font-size: 18px; /* Dimensione del testo */
@@ -241,7 +239,7 @@ input:checked + .slider:before {
     position: absolute;
     bottom: -7.5px;
     left: 0;
-    border-top: 7.5px solid #fff; /* Bianco */
+    border-top: 7.5px solid #ffffff98; /* Bianco */
     border-right: 9px solid transparent;
 }
 
@@ -249,7 +247,7 @@ input:checked + .slider:before {
     display: block;
     font-size: 15px; /* Dimensione del font */
     text-align: right;
-    color: rgba(255, 255, 255, 0.3); /* Colore del testo */
+    color: rgba(0, 0, 0, 0.817); /* Colore del testo */
     position: absolute;
     bottom: -20px; /* Posiziona il timestamp sotto il messaggio */
     right: 20px; /* Allinea il timestamp a destra */
@@ -269,40 +267,39 @@ body::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb {
 .chat-head {
     display: flex; /* Imposta il display del contenitore come flexbox */
     align-items: center; /* Allinea gli elementi al centro verticalmente */
-    padding: 10px; /* Aggiunge 10px di padding su tutti i lati */
-    border-bottom: 1px solid #fff; /* Linea divisoria bianca */
+    justify-content: center; /* Centra gli elementi orizzontalmente */ /* Aggiunge 10px di padding su tutti i lati */
+    border-bottom: 1px solid #fff; /* Aggiunge un bordo inferiore bianco */
     background-color: #000; /* Nero */
     position: sticky; /* Rende l'elemento appiccicoso in cima durante lo scorrimento */
     top: 0; /* Allinea l'elemento al top */
     z-index: 1; /* Imposta lo z-index per assicurarsi che l'elemento rimanga in cima */
-    width: 110%; /* Imposta la larghezza al 110% del contenitore genitore */
-    margin-left: -15px; /* Sposta l'elemento a sinistra di 15px */
-}
-
-.chat-head img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover; /* Assicura che l'immagine si adatti correttamente */
+    width: 110%; /* Imposta la larghezza al 100% del contenitore genitore */
+    margin-left: -15px;
 }
 
 .chat-head .chat-contact-name {
     font-weight: 600; /* Imposta il peso del font a 600 */
     color: #00FF00; /* Verde fluo */
+    margin-right: 10px; /* Aggiunge un margine a destra del nome */
+    margin-left: -105px;
+    font-size: 25px;
 }
 
 .chat-head .chat-contact-status {
-    color: #fff; /* Bianco */
+    color: #00FF00; /* Verde fluo */
+    margin-left: -105px;
 }
 
 /* Chat Messages */
 .chat-messages {
-    background-color: #000;
-    background-size: cover;
+    background: url('../static/sfondo.png') no-repeat center center fixed;
+    background-size: 100%; /* Ingrandisce l'immagine di sfondo al 120% */
     padding-bottom: 60px;
     height: calc(100vh - 160px);
     overflow-y: auto;
-    width: 100%;
+    width: calc(100% - 320px); /* Larghezza della chat area meno la larghezza della sidebar */
+    margin-left: -15px; /* Sposta il contenitore a destra della sidebar */
+    margin-right: 0px; /* Aggiunge un margine a destra */
 }
 
 /* Input Group Container */
@@ -311,28 +308,24 @@ body::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb {
     bottom: 0; /* Allinea il contenitore al fondo della finestra */
     width: 78%; /* Imposta la larghezza del contenitore al 100% della finestra */
     background-color: #000; /* Nero */
-    padding: 20px 110px; /* Aggiunge uno spazio interno di 10px su tutti i lati */
-    border-top: 1px solid #fff; /* Linea divisoria bianca */
+    padding: 20px 110px; /* Aggiunge uno spazio interno di 10px su tutti i lati */ 
     margin-left: -15px; /* Sposta il contenitore 15px a sinistra */
 }
 
 .input-group .form-control {
-    border: 1px solid #fff; /* Bordo bianco */
-    border-radius: 20px;
-    padding: 10px 15px;
-    box-shadow: none;
-    background-color: #000; /* Nero */
-    color: #00FF00; /* Verde fluo */
+    border: 1px solid #fff; /* Imposta un bordo di 1px con colore grigio chiaro */
+    border-radius: 20px; /* Arrotonda gli angoli del bordo con un raggio di 20px */
+    padding: 10px 15px; /* Aggiunge uno spazio interno di 10px sopra/sotto e 15px a destra/sinistra */
+    box-shadow: none; /* Rimuove qualsiasi ombreggiatura dal bordo */
 }
 
 .input-group .btn-primary {
     background-color: #00FF00; /* Verde fluo */
     border-color: #00FF00; /* Verde fluo */
-    border-radius: 20px;
-    color: #000; /* Nero */
+    border-radius: 20px; /* Arrotonda gli angoli del bordo con un raggio di 20px */
 }
 
 .input-group .btn-primary:hover {
     background-color: #00cc00; /* Verde più scuro */
-    border-color: #00cc00;
+    border-color: #00cc00; /* Verde più scuro */
 }
