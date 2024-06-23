@@ -310,6 +310,15 @@ input:checked + .slider:before {
     border-radius: 10px; /* Arrotonda gli angoli della thumb */
 }
 
+.chat-messages::-webkit-scrollbar {
+    width: 4px; /* Imposta la larghezza della scrollbar */
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2); /* Imposta il colore e la trasparenza della thumb della scrollbar */
+    border-radius: 10px; /* Arrotonda gli angoli della thumb */
+}
+
 /* Chat Head */
 .chat-head {
     display: flex; /* Imposta il display del contenitore come flexbox */
