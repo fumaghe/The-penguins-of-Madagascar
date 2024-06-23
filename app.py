@@ -1,7 +1,7 @@
-import redis
-import hashlib
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_socketio import SocketIO, join_room, send, emit
+import redis
+import hashlib
 import datetime
 import threading
 
@@ -25,16 +25,6 @@ except redis.ConnectionError as e:
 # Funzione per hashing della password
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
-
-@app.route('/toggle_auto_delete', methods=['POST'])
-def toggle_auto_delete():
-    if 'username' not in session:
-        return redirect(url_for('login'))
-    username = session['username']
-    user_data = r.hgetall(username)
-    new_auto_delete_status = "true" if user_data.get("auto_delete", "false") == "false" else "false"
-    r.hset(username, "auto_delete", new_auto_delete_status)
-    return redirect(url_for('home'))
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -119,6 +109,16 @@ def toggle_dnd():
     r.hset(username, "dnd", new_dnd_status)
     return redirect(url_for('home'))
 
+@app.route('/toggle_auto_delete', methods=['POST'])
+def toggle_auto_delete():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    username = session['username']
+    user_data = r.hgetall(username)
+    new_auto_delete_status = "true" if user_data.get("auto_delete", "false") == "false" else "false"
+    r.hset(username, "auto_delete", new_auto_delete_status)
+    return redirect(url_for('home'))
+
 @app.route('/profile', methods=['POST'])
 def update_profile():
     if 'username' not in session:
@@ -154,16 +154,6 @@ def chat(contact):
     messages = get_chat_messages(room)
     return jsonify({'messages': messages})
 
-@app.route('/search', methods=['GET', 'POST'])
-def search():
-    if 'username' not in session:
-        return redirect(url_for('login'))
-    if request.method == 'POST':
-        search_query = request.form['search_query']
-        users = search_users(search_query)
-        return render_template('search_result.html', results=users)
-    return render_template('search.html')
-
 @socketio.on('join')
 def on_join(data):
     username = data['username']
@@ -183,21 +173,20 @@ def on_message(data):
     if contact_data.get("dnd") == "true":
         emit('error', {'msg': 'L\'utente è in modalità Do Not Disturb.'}, to=request.sid)
     else:
-        timestamp = datetime.datetime.now().strftime("%H:%M")
+        timestamp = datetime.datetime.now().strftime("%H:%M:%S")
+        auto_delete = r.hget(username, "auto_delete") == "true"
         formatted_message = f"{timestamp} > {username}: {message}"
         r.rpush(chat_key, formatted_message)
-        send({'message': message, 'username': username, 'timestamp': timestamp}, to=room)
+        send({'message': message, 'username': username, 'timestamp': timestamp, 'auto_delete': auto_delete}, to=room)
 
         # Check if auto delete is enabled for the user
-        user_data = r.hgetall(username)
-        if user_data.get("auto_delete", "false") == "true":
-            timer = threading.Timer(60.0, delete_message, args=[chat_key, formatted_message])
+        if auto_delete:
+            timer = threading.Timer(60.0, delete_message, args=[chat_key, formatted_message, room])
             timer.start()
 
-def delete_message(chat_key, message):
+def delete_message(chat_key, message, room):
     r.lrem(chat_key, 0, message)
     # Notify clients to remove the message
-    room = chat_key.replace("_chat", "")
     send({'message': message, 'delete': True}, to=room)
 
 def get_contacts(username):

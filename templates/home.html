@@ -157,9 +157,16 @@
             $.get('/chat/' + contact, function(data) {
                 $('#chat-messages').html(data.messages.map(function(message) {
                     var msgClass = message.sender === username ? 'sent-message' : 'received-message';
-                    return '<div class="' + msgClass + '">' + message.text + '<span class="message-timestamp">' + message.timestamp + '</span></div>';
+                    var messageHtml = `
+                        <div class="${msgClass}">
+                            ${message.text}
+                            <span class="message-timestamp">${message.timestamp}</span>
+                            ${message.auto_delete ? '<span class="delete-timer" data-timestamp="' + message.timestamp + '"></span>' : ''}
+                        </div>`;
+                    return messageHtml;
                 }).join(''));
                 $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+                startTimers();
             });
         });
 
@@ -191,8 +198,17 @@
                 }).remove();
             } else {
                 var msgClass = data.username === username ? 'sent-message' : 'received-message';
-                $('#chat-messages').append('<div class="' + msgClass + '">' + data.message + '<span class="message-timestamp">' + data.timestamp + '</span></div>');
+                var messageHtml = `
+                    <div class="${msgClass}">
+                        ${data.message}
+                        <span class="message-timestamp">${data.timestamp}</span>
+                        ${data.auto_delete ? '<span class="delete-timer" data-timestamp="' + data.timestamp + '"></span>' : ''}
+                    </div>`;
+                $('#chat-messages').append(messageHtml);
                 $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+                if (data.auto_delete) {
+                    startTimer(data.timestamp);
+                }
             }
         });
 
@@ -244,6 +260,31 @@
         function getRoomName(user1, user2) {
             var participants = [user1, user2].sort();
             return participants[0] + '_' + participants[1];
+        }
+
+        function startTimers() {
+            $('.delete-timer').each(function() {
+                var timestamp = $(this).data('timestamp');
+                startTimer(timestamp);
+            });
+        }
+
+        function startTimer(timestamp) {
+            var timer = setInterval(function() {
+                var now = new Date();
+                var messageTime = new Date();
+                var parts = timestamp.split(':');
+                messageTime.setHours(parts[0], parts[1], parts[2]);
+                var timeDiff = Math.round((now - messageTime) / 1000);
+                var timeLeft = 60 - timeDiff;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    $('.delete-timer[data-timestamp="' + timestamp + '"]').closest('div').remove();
+                } else {
+                    $('.delete-timer[data-timestamp="' + timestamp + '"]').text('Deleting in ' + timeLeft + 's');
+                }
+            }, 1000);
         }
     });
 </script>
