@@ -149,14 +149,6 @@ input:checked + .slider:before {
 }
 
 /* Chat Area */
-.d-flex {
-    display: flex !important; /* Imposta il display del contenitore come flexbox */
-}
-
-.flex-column {
-    flex-direction: column !important; /* Dispone i figli in una colonna verticale */
-}
-
 .p-3 {
     padding: 1rem !important; /* Aggiunge 1 rem di padding su tutti i lati */
 }
@@ -167,10 +159,6 @@ input:checked + .slider:before {
 
 .border-top {
     border-top: 1px solid #fff !important; /* Aggiunge un bordo superiore */
-}
-
-.flex-grow-1 {
-    flex-grow: 1 !important; /* Fa crescere l'elemento per riempire lo spazio disponibile */
 }
 
 .overflow-auto {
@@ -185,6 +173,7 @@ input:checked + .slider:before {
 .input-group-append {
     margin-left: 10px; /* Aggiunge 10px di margine a sinistra */
 }
+
 .sent-message, .received-message {
     border-radius: 20px; /* Arrotonda gli angoli del bordo */
     margin: 10px 90px; /* Aggiunge margine sopra e sotto e 60px a destra e sinistra */
@@ -267,7 +256,7 @@ body::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb {
 .chat-head {
     display: flex; /* Imposta il display del contenitore come flexbox */
     align-items: center; /* Allinea gli elementi al centro verticalmente */
-    justify-content: center; /* Centra gli elementi orizzontalmente */ /* Aggiunge 10px di padding su tutti i lati */
+    justify-content: center; /* Centra gli elementi orizzontalmente */
     border-bottom: 1px solid #fff; /* Aggiunge un bordo inferiore bianco */
     background-color: #000; /* Nero */
     position: sticky; /* Rende l'elemento appiccicoso in cima durante lo scorrimento */
@@ -294,7 +283,7 @@ body::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb {
 .chat-messages {
     background: url('../static/sfondo.png') no-repeat center center fixed;
     background-size: 100%; /* Ingrandisce l'immagine di sfondo al 120% */
-    padding-bottom: 60px;
+    padding-bottom: 200px; /* Aumenta il padding per evitare che i messaggi si sovrappongano con la barra di inserimento */
     height: calc(100vh - 160px);
     overflow-y: auto;
     width: calc(100% - 320px); /* Larghezza della chat area meno la larghezza della sidebar */
@@ -328,4 +317,24 @@ body::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb {
 .input-group .btn-primary:hover {
     background-color: #00cc00; /* Verde più scuro */
     border-color: #00cc00; /* Verde più scuro */
+}
+
+/* Grid Layout */
+.chat-container {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    height: 100vh; /* Adatta l'altezza del contenitore al 100% della viewport */
+}
+
+.chat-head {
+    grid-row: 1;
+}
+
+.chat-messages {
+    grid-row: 2;
+    overflow-y: auto;
+}
+
+.input-group-container {
+    grid-row: 3;
 }
