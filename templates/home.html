@@ -196,16 +196,16 @@
     $(document).ready(function() {
         var socket = io();
         var username = '{{ username }}';
-    
+
         function bindContactClick() {
             $('.contact-item').off('click').on('click', function() {
                 var contact = $(this).data('contact');
                 $('#chat-contact-name').text(contact);
-    
+
                 // Join the room
                 var room = getRoomName(username, contact);
                 socket.emit('join', { username: username, room: room });
-    
+
                 // Load chat messages for the selected contact
                 $.get('/chat/' + contact, function(data) {
                     $('#chat-messages').html(data.messages.map(function(message) {
@@ -223,25 +223,25 @@
                 });
             });
         }
-    
+
         bindContactClick();
-    
+
         // Handle message send
         $('#send-message').on('click', function() {
             var message = $('#message-input').val();
             var contact = $('#chat-contact-name').text();
             var room = getRoomName(username, contact);
-    
+
             socket.emit('message', { room: room, message: message, username: username, contact: contact });
             $('#message-input').val('');
         });
-    
+
         $('#message-input').keypress(function(e) {
             if (e.which == 13) { // Enter key pressed
                 $('#send-message').click(); // Trigger send button click event
             }
         });
-    
+
         socket.on('message', function(data) {
             if (data.error) {
                 alert(data.error);
@@ -267,7 +267,7 @@
                 }
             }
         });
-    
+
         // New code for updating the last message in the contact list
         socket.on('update_last_message', function(data) {
             var contact = data.contact;
@@ -275,38 +275,38 @@
             var contactItem = $('.contact-item[data-contact="' + contact + '"] .last-message');
             contactItem.text(lastMessage);
         });
-    
+
         // Handle Add Contact
         $('#add-btn').on('click', function() {
             $('#addContactModal').modal('show');
         });
-    
+
         // Handle Remove Contact
         $('#remove-btn').on('click', function() {
             $('#removeContactModal').modal('show');
         });
-    
+
         // Handle DND
         $('#dnd-checkbox').on('change', function() {
             var dnd = $(this).is(':checked');
             $.post('/toggle_dnd', { dnd: dnd });
         });
-    
+
         // Handle Profile
         $('#profile-btn').on('click', function() {
             $('#profile-modal').modal('show');
         });
-    
+
         // Handle Search
         $('#search-btn').on('click', function() {
             $('#search-modal').modal('show');
         });
-    
+
         // Handle Auto Delete
         $('#auto-delete-checkbox').on('change', function() {
             $.post('/toggle_auto_delete');
         });
-    
+
         // Handle Search Form
         $('#search-form').on('submit', function(event) {
             event.preventDefault();
@@ -321,18 +321,18 @@
                 $('#search-results').html(`<ul class="list-group">${results}</ul>`);
             });
         });
-    
+
         // Handle Add Contact from Search Results
         $(document).on('click', '.add-contact-btn', function() {
-            var username = $(this).data('username');
-            $.post('/add_contact', { new_contact: username }, function(response) {
+            var new_contact = $(this).data('username');
+            $.post('/add_contact', { new_contact: new_contact }, function(response) {
                 if (response.status === 'success') {
                     // Update contact list
                     var newContactHtml = `
-                        <li class="list-group-item contact-item" data-contact="${username}">
-                            <img src="{{ url_for('static', filename='default-avatar.png') }}" alt="Avatar" class="rounded-circle">
+                        <li class="list-group-item contact-item" data-contact="${new_contact}">
+                            <img src="${url_for_static('avatars/' + new_contact + '.png')}" alt="Avatar" class="rounded-circle">
                             <div class="contact-info">
-                                <span class="contact-name">${username}</span>
+                                <span class="contact-name">${new_contact}</span>
                                 <span class="last-message">...</span>
                             </div>
                         </li>
@@ -344,7 +344,7 @@
                 }
             });
         });
-    
+
         $('#add-contact-form').on('submit', function(event) {
             event.preventDefault();
             $.post('/add_contact', $(this).serialize(), function(response) {
@@ -356,7 +356,7 @@
                 }
             });
         });
-    
+
         $('#remove-contact-form').on('submit', function(event) {
             event.preventDefault();
             $.post('/remove_contact', $(this).serialize(), function(response) {
@@ -368,19 +368,19 @@
                 }
             });
         });
-    
+
         function getRoomName(user1, user2) {
             var participants = [user1, user2].sort();
             return participants[0] + '_' + participants[1];
         }
-    
+
         function startTimers() {
             $('.delete-timer').each(function() {
                 var timestamp = $(this).data('timestamp');
                 startTimer(timestamp);
             });
         }
-    
+
         function startTimer(timestamp) {
             var timer = setInterval(function() {
                 var now = new Date();
@@ -389,7 +389,7 @@
                 messageTime.setHours(parts[0], parts[1], parts[2]);
                 var timeDiff = Math.round((now - messageTime) / 1000);
                 var timeLeft = 60 - timeDiff;
-    
+
                 if (timeLeft <= 0) {
                     clearInterval(timer);
                     $('.delete-timer[data-timestamp="' + timestamp + '"]').closest('div').remove();
@@ -398,8 +398,13 @@
                 }
             }, 1000);
         }
+
+        // Helper function to construct URL for static files
+        function url_for_static(filename) {
+            return '{{ url_for("static", filename="") }}' + filename;
+        }
     });
-    
 </script>
+
 </body>
 </html>
