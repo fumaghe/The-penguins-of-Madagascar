@@ -321,29 +321,28 @@ input:checked + .slider:before {
 
 /* Chat Head */
 .chat-head {
-    display: flex; /* Imposta il display del contenitore come flexbox */
-    align-items: center; /* Allinea gli elementi al centro verticalmente */
-    justify-content: center; /* Centra gli elementi orizzontalmente */
-    border-bottom: 1px solid #fff; /* Aggiunge un bordo inferiore bianco */
-    background-color: #000; /* Nero */
-    position: sticky; /* Rende l'elemento appiccicoso in cima durante lo scorrimento */
-    top: 0; /* Allinea l'elemento al top */
-    z-index: 1; /* Imposta lo z-index per assicurarsi che l'elemento rimanga in cima */
-    width: 110%; /* Imposta la larghezza al 100% del contenitore genitore */
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #fff;
+    background-color: #000;
+    padding: 10px;
     margin-left: -15px;
+    width: 110%;
+    justify-content: flex-start; /* Aggiungi questa riga per allineare a sinistra */
 }
 
-.chat-head .chat-contact-name {
-    font-weight: 600; /* Imposta il peso del font a 600 */
-    color: #00FF00; /* Verde fluo */
-    margin-right: 10px; /* Aggiunge un margine a destra del nome */
-    margin-left: -105px;
+.chat-head img {
+    margin-right: 15px;
+}
+
+.chat-contact-name {
+    font-weight: 600;
+    color: #00FF00;
     font-size: 25px;
 }
 
-.chat-head .chat-contact-status {
-    color: #00FF00; /* Verde fluo */
-    margin-left: -105px;
+.chat-contact-status {
+    color: #00FF00;
 }
 
 /* Chat Messages */

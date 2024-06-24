@@ -61,6 +61,7 @@
             <div id="chat-container" class="flex-grow-1 d-flex flex-column">
                 <!-- Chat Head -->
                 <div class="chat-head d-flex align-items-center p-3 border-bottom">
+                    <img id="chat-avatar" src="" alt="Avatar" class="rounded-circle" style="width: 50px; height: 50px; margin-right: 15px;">
                     <div class="ml-3">
                         <h5 class="chat-contact-name" id="chat-contact-name"></h5>
                         <small class="chat-contact-status" id="chat-contact-status">Last seen: 2 hours ago</small>
@@ -201,11 +202,13 @@
             $('.contact-item').off('click').on('click', function() {
                 var contact = $(this).data('contact');
                 $('#chat-contact-name').text(contact);
-
+                var avatarSrc = $(this).find('img').attr('src');
+                $('#chat-avatar').attr('src', avatarSrc);
+        
                 // Join the room
                 var room = getRoomName(username, contact);
                 socket.emit('join', { username: username, room: room });
-
+        
                 // Load chat messages for the selected contact
                 $.get('/chat/' + contact, function(data) {
                     $('#chat-messages').html(data.messages.map(function(message) {
