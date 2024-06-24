@@ -332,7 +332,12 @@ input:checked + .slider:before {
 }
 
 .chat-head img {
-    margin-right: 15px;
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    object-fit: cover; /* Assicura che l'immagine si adatti correttamente */
+    margin-right: 10px;
+    margin-left: 5px;
 }
 
 .chat-contact-name {
