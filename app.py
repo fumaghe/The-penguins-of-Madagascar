@@ -142,36 +142,45 @@ def toggle_auto_delete():
 def update_profile():
     if 'username' not in session:
         return redirect(url_for('login'))
-    
+
     current_username = session['username']
     new_username = request.form.get('new_username', current_username)
     new_password = request.form.get('new_password')
     avatar = request.files.get('avatar')
 
+    # Recupera i dati attuali dell'utente
     user_data = r.hgetall(current_username)
-
-    if new_username:
-        user_data['username'] = new_username
     
+    # Aggiorna il nome utente se fornito
+    if new_username and new_username != current_username:
+        user_data['username'] = new_username
+
+    # Aggiorna la password se fornita
     if new_password:
         user_data['password'] = hash_password(new_password)
     
+    # Aggiorna l'avatar se fornito
     if avatar and avatar.filename != '':
         filename = secure_filename(f"{new_username}.png")
         avatar_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         avatar.save(avatar_path)
-        user_data['avatar'] = filename  # Salva il nuovo nome del file
-    else:
-        user_data['avatar'] = user_data.get('avatar', 'foto profilo.png')
+        user_data['avatar'] = filename  # Aggiorna solo il nome del file dell'avatar
+
+    # Verifica che l'avatar esistente non venga rimosso
+    if 'avatar' not in user_data:
+        user_data['avatar'] = 'foto profilo.png'
 
     # Aggiorna i dati dell'utente in Redis
-    r.hset(new_username, mapping=user_data)
-    
-    if new_username != current_username:
-        r.delete(current_username)
+    r.hset(current_username, mapping=user_data)
+
+    # Se il nome utente è cambiato, rinomina la chiave in Redis
+    if new_username and new_username != current_username:
+        r.rename(current_username, new_username)
         session['username'] = new_username
 
     return redirect(url_for('home'))
+
+
 
 @app.route('/chat/<contact>')
 def chat(contact):
