@@ -128,11 +128,11 @@ def toggle_dnd():
     r.hset(username, "dnd", new_dnd_status)
     
     # Notify all users about the DND status change
-    dnd_message = f"{username} ha attivato la modalità non disturbare" if new_dnd_status == "true" else f"{username} ha disattivato la modalità non disturbare"
+    dnd_message = f"Il destinatario ha attivato la modalità non disturbare" if new_dnd_status == "true" else f"{username} ha disattivato la modalità non disturbare"
     socketio.emit('dnd_status_change', {'message': dnd_message, 'username': 'system'}, broadcast=True)
     
     return redirect(url_for('home'))
-
+    
 @app.route('/toggle_auto_delete', methods=['POST'])
 def toggle_auto_delete():
     if 'username' not in session:
@@ -227,7 +227,7 @@ def on_message(data):
         return
 
     if contact_data.get("dnd") == "true":
-        emit('error', {'msg': f'{username} è in modalità Do Not Disturb.'}, to=request.sid)
+        emit('error', {'msg': 'Il destinatario è in modalità Do Not Disturb.'}, to=request.sid)
         return
 
     timestamp = datetime.datetime.now().strftime("%H:%M:%S")
