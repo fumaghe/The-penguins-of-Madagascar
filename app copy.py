@@ -11,7 +11,6 @@ app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 socketio = SocketIO(app)
 
-
 # Connessione a Redis
 try:
     r = redis.Redis(
