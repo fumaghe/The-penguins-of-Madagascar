@@ -15,6 +15,28 @@
             overflow-y: auto;
             width: 110%;
         }
+
+        /* Adjustments for chat container and input */
+        #chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        #chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+            margin-bottom: 60px; /* Adjust to prevent last message from being hidden */
+        }
+
+        .input-group-container {
+            position: fixed;
+            bottom: 0;
+            width: calc(100% - 320px); /* Adjust width according to sidebar */
+            background-color: black;
+            padding: 10px;
+        }
     </style>
 </head>
 <body>
