@@ -394,10 +394,10 @@
                 var timeLeft = 60 - timeDiff;
 
                 if (timeLeft <= 0) {
-                    clearInterval(timer);
+                    clearInterval();
                     $('.delete-timer[data-timestamp="' + timestamp + '"]').closest('div').remove();
                 } else {
-                    $('.delete-timer[data-timestamp="' + timestamp + '"]').text('Deleting in ' + timeLeft + 's');
+                    $('.delete-timer[data-timestamp="' + timestamp + '"]').text( timeLeft + 's');
                 }
             }, 1000);
         }
