@@ -412,7 +412,7 @@ input:checked + .slider:before {
 
 /* Stili per le pagine di login e register */
 body {
-    background: linear-gradient(to bottom right, #2c2b2b, #2c2b2b); /* Gradient blu notte e nero */
+    background: url('/static/sfondologin.png') no-repeat center center fixed;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -421,7 +421,7 @@ body {
 }
 
 .container {
-    background-color: #000; /* Sfondo nero */
+    background-color: rgba(0, 0, 0, 0.65); /* Sfondo nero con trasparenza (0.8) */
     color: #00FF00; /* Testo verde fluo */
     padding: 30px 40px;
     border-radius: 10px; /* Angoli arrotondati */
