@@ -567,3 +567,21 @@ a:hover {
 .search-result-item .add-contact-btn:hover {
     background-color: #00cc00; /* Verde più scuro */
 }
+
+
+.system-message {
+    text-align: center;
+    font-style: italic;
+    color: #00cc00; /* Red color for system messages */
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #000000; /* Black background */
+    border: 1px solid #00cc00; /* Red border */
+    max-width: 35%;
+    word-wrap: break-word;
+    display: block;
+    clear: both;
+    font-size: 18px;
+    line-height: 1.75;
+}

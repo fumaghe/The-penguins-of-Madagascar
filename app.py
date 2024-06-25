@@ -126,6 +126,11 @@ def toggle_dnd():
     user_data = r.hgetall(username)
     new_dnd_status = "true" if user_data["dnd"] == "false" else "false"
     r.hset(username, "dnd", new_dnd_status)
+    
+    # Notify all users about the DND status change
+    dnd_message = f"{username} ha attivato la modalità non disturbare" if new_dnd_status == "true" else f"{username} ha disattivato la modalità non disturbare"
+    socketio.emit('dnd_status_change', {'message': dnd_message, 'username': 'system'}, broadcast=True)
+    
     return redirect(url_for('home'))
 
 @app.route('/toggle_auto_delete', methods=['POST'])
@@ -214,22 +219,29 @@ def on_message(data):
     contact = data['contact']
     chat_key = f"{room}_chat"
 
+    user_data = r.hgetall(username)
     contact_data = r.hgetall(contact)
+    
+    if user_data.get("dnd") == "true":
+        emit('error', {'msg': 'Hai attivato la modalità Do Not Disturb.'}, to=request.sid)
+        return
+
     if contact_data.get("dnd") == "true":
-        emit('error', {'msg': 'L\'utente è in modalità Do Not Disturb.'}, to=request.sid)
-    else:
-        timestamp = datetime.datetime.now().strftime("%H:%M:%S")
-        auto_delete = r.hget(username, "auto_delete") == "true"
-        formatted_message = f"{timestamp} > {username}: {message}"
-        r.rpush(chat_key, formatted_message)
-        send({'message': message, 'username': username, 'timestamp': timestamp, 'auto_delete': auto_delete}, to=room)
+        emit('error', {'msg': f'{username} è in modalità Do Not Disturb.'}, to=request.sid)
+        return
 
-        # Emit to update the last message in the sidebar
-        emit('update_last_message', {'contact': contact, 'last_message': message}, broadcast=True)
+    timestamp = datetime.datetime.now().strftime("%H:%M:%S")
+    auto_delete = r.hget(username, "auto_delete") == "true"
+    formatted_message = f"{timestamp} > {username}: {message}"
+    r.rpush(chat_key, formatted_message)
+    send({'message': message, 'username': username, 'timestamp': timestamp, 'auto_delete': auto_delete}, to=room)
 
-        if auto_delete:
-            timer = threading.Timer(60.0, delete_message, args=[chat_key, formatted_message, room])
-            timer.start()
+    # Emit to update the last message in the sidebar
+    emit('update_last_message', {'contact': contact, 'last_message': message}, broadcast=True)
+
+    if auto_delete:
+        timer = threading.Timer(60.0, delete_message, args=[chat_key, formatted_message, room])
+        timer.start()
 
 def delete_message(chat_key, message, room):
     r.lrem(chat_key, 0, message)

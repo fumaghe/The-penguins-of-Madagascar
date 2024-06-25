@@ -271,6 +271,24 @@
             }
         });
 
+        socket.on('error', function(data) {
+            var errorMessageHtml = `
+                <div class="system-message">
+                    ${data.msg}
+                </div>`;
+            $('#chat-messages').append(errorMessageHtml);
+            $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+        });
+
+        socket.on('dnd_status_change', function(data) {
+            var dndMessageHtml = `
+                <div class="system-message">
+                    ${data.message}
+                </div>`;
+            $('#chat-messages').append(dndMessageHtml);
+            $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+        });
+
         // New code for updating the last message in the contact list
         socket.on('update_last_message', function(data) {
             var contact = data.contact;
@@ -408,6 +426,7 @@
         }
     });
 </script>
+
 
 </body>
 </html>
