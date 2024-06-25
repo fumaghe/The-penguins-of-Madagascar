@@ -1,0 +1,7 @@
+<ul class="list-group">
+    {% for result in results %}
+    <li class="list-group-item search-result-item" data-username="{{ result.name }}">
+        {{ result.name }}
+    </li>
+    {% endfor %}
+</ul>
