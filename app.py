@@ -29,9 +29,13 @@ def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
 # Percorso della cartella di upload
-UPLOAD_FOLDER = r'C:\Users\AndreaFumagalli\OneDrive - ITS Angelo Rizzoli\Documenti\GitHub\The-penguins-of-Madagascar\static\avatars'
+UPLOAD_FOLDER = r'static\avatars'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 DEFAULT_AVATAR = 'foto profilo.png'
+
+# Creazione della cartella di upload se non esiste
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
