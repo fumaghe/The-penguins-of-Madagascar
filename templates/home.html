@@ -42,7 +42,6 @@
 <body>
 <div class="container-fluid">
     <div class="row vh-100">
-        <!-- Sidebar -->
         <div class="col-3 sidebar">
             <h1>Whatsup</h1>
             <h3>Contacts</h3>
@@ -76,7 +75,9 @@
             <hr>
             <button id="profile-btn" class="btn btn-secondary">Profile</button>
             <button id="search-btn" class="btn btn-secondary">Search Users</button>
+            <a href="{{ url_for('logout') }}" class="btn btn-secondary mt-2">Logout</a>
         </div>
+        
 
         <!-- Chat Column -->
         <div class="col-9 d-flex flex-column" style="margin-left: 320px;">
@@ -230,7 +231,12 @@
                 // Join the room
                 var room = getRoomName(username, contact);
                 socket.emit('join', { username: username, room: room });
-        
+                
+                // Handle Logout
+                $('#logout-btn').on('click', function() {
+                    window.location.href = '/logout';
+                });
+
                 // Load chat messages for the selected contact
                 $.get('/chat/' + contact, function(data) {
                     $('#chat-messages').html(data.messages.map(function(message) {
